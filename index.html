@@ -35,7 +35,7 @@
     pointer-events: none;
   }
 
-  /* Common buttons */
+  /* Buttons */
   .btn {
     display: inline-block;
     margin: 0.5rem;
@@ -53,6 +53,7 @@
 
   /* Sections */
   section { padding: 100px 10%; position: relative; }
+  h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; text-align:center; }
 
   /* Hero Section */
   #hero {
@@ -89,6 +90,7 @@
     padding: 1rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    text-align:center;
   }
   .track-card:hover {
     transform: translateY(-8px);
@@ -97,6 +99,7 @@
   .track-card iframe {
     width: 100%;
     border-radius: 10px;
+    margin-top: 0.5rem;
   }
 
   /* Featured Project */
@@ -179,7 +182,7 @@
     color: #ff6eff;
   }
 
-  /* Smooth fade-in */
+  /* Fade-in animation */
   .fade-in {
     opacity: 0;
     transform: translateY(20px);
@@ -218,16 +221,13 @@
   <h2 class="fade-in">Music</h2>
   <div class="grid fade-in">
     <div class="track-card">
-      <h3>Track 1</h3>
-      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+      <h3>Lucky — YouTube</h3>
+      <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=LuckyDTM" frameborder="0" allowfullscreen></iframe>
     </div>
     <div class="track-card">
-      <h3>Track 2</h3>
-      <iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789" frameborder="0"></iframe>
-    </div>
-    <div class="track-card">
-      <h3>Track 3</h3>
-      <iframe src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC" frameborder="0"></iframe>
+      <h3>Lucky — SoundCloud</h3>
+      <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" 
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/bh-fire-558322673"></iframe>
     </div>
   </div>
 </section>
@@ -247,8 +247,8 @@
 <section id="about">
   <h2 class="fade-in">About Lucky</h2>
   <div class="fade-in" style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
-    <img src="https://via.placeholder.com/300x300.png?text=Lucky" alt="Lucky">
-    <p>Lucky creates emotionally charged electronic music with cinematic intros, intense beat switches, orchestral influence, and chaotic high-energy drops. The sound blends artcore, dubstep, speedcore, melodic elements, and cosmic atmospheres.</p>
+    <img src="https://yt3.googleusercontent.com/tYkUvt4AHQYVgQ7y8D-w7U5mbpf5HPiqTqGjHTq60ASe0bx9yaGLIVz4GizTnwz_bA3cwVe1bg=s160-c-k-c0x00ffffff-no-rj" alt="Lucky">
+    <p>Lucky creates music for rhythm games. High-energy, genre-switching electronic music blending cinematic elements, intense beats, and immersive atmospheres.</p>
   </div>
 </section>
 
@@ -257,14 +257,12 @@
   <h2 class="fade-in">Contact</h2>
   <div class="fade-in">
     <div class="socials">
-      <a href="#">Instagram</a>
-      <a href="#">YouTube</a>
-      <a href="#">SoundCloud</a>
-      <a href="#">Spotify</a>
+      <a href="https://www.youtube.com/@LuckyDTM" target="_blank">YouTube</a>
+      <a href="https://soundcloud.com/bh-fire-558322673" target="_blank">SoundCloud</a>
+      <a href="https://discord.com/users/758210843510308864" target="_blank">Discord</a>
     </div>
     <form>
       <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Email" required>
       <textarea rows="5" placeholder="Message" required></textarea>
       <button type="submit">Send</button>
     </form>
@@ -283,7 +281,6 @@
       }
     });
   }, appearOptions);
-
   faders.forEach(fader => { appearOnScroll.observe(fader); });
 
   // Particle background
