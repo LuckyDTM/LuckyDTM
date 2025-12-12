@@ -6,7 +6,6 @@
 <title>Lucky — Electronic Music Producer</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /* Reset & base */
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -23,7 +22,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, #3f0d77 0%, #0d0d1a 100%);
+    background: linear-gradient(160deg, #000000 0%, #0d1a3a 100%);
     z-index: -2;
   }
   .particles {
@@ -35,7 +34,6 @@
     pointer-events: none;
   }
 
-  /* Buttons */
   .btn {
     display: inline-block;
     margin: 0.5rem;
@@ -51,11 +49,10 @@
     color: #0d0d1a;
   }
 
-  /* Sections */
   section { padding: 100px 10%; position: relative; }
   h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; text-align:center; }
 
-  /* Hero Section */
+  /* Hero */
   #hero {
     min-height: 100vh;
     display: flex;
@@ -78,7 +75,7 @@
     margin-bottom: 2rem;
   }
 
-  /* Music Section */
+  /* Music */
   #music .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -140,49 +137,15 @@
   }
 
   /* Contact */
-  #contact {
-    text-align: center;
-  }
-  #contact form {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: auto;
-  }
-  #contact input, #contact textarea {
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-  }
-  #contact button {
-    border-radius: 20px;
-    padding: 0.75rem;
-    border: 2px solid #8affff;
-    background: transparent;
-    color: #8affff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  #contact button:hover {
-    background: #8affff;
-    color: #0d0d1a;
-  }
-
-  /* Socials */
+  #contact { text-align: center; }
   .socials a {
     margin: 0 0.5rem;
     font-size: 1.5rem;
     color: #8affff;
     transition: color 0.3s;
   }
-  .socials a:hover {
-    color: #ff6eff;
-  }
+  .socials a:hover { color: #ff6eff; }
 
-  /* Fade-in animation */
   .fade-in {
     opacity: 0;
     transform: translateY(20px);
@@ -191,6 +154,25 @@
   .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Top-right floating social icons */
+  #top-socials {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 999;
+  }
+  #top-socials a img {
+    width: 35px;
+    height: 35px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  #top-socials a img:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px #8affff);
   }
 
   @media(max-width:768px){
@@ -202,6 +184,19 @@
 </style>
 </head>
 <body>
+
+<!-- Top-right Social Icons -->
+<div id="top-socials">
+  <a href="https://www.youtube.com/@LuckyDTM" target="_blank">
+    <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png" alt="YouTube">
+  </a>
+  <a href="https://soundcloud.com/bh-fire-558322673" target="_blank">
+    <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/soundcloud-white-icon.png" alt="SoundCloud">
+  </a>
+  <a href="https://discord.com/users/758210843510308864" target="_blank">
+    <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/discord-white-icon.png" alt="Discord">
+  </a>
+</div>
 
 <div class="particles"></div>
 
@@ -261,16 +256,11 @@
       <a href="https://soundcloud.com/bh-fire-558322673" target="_blank">SoundCloud</a>
       <a href="https://discord.com/users/758210843510308864" target="_blank">Discord</a>
     </div>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <textarea rows="5" placeholder="Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
   </div>
 </section>
 
 <script>
-  // Fade-in on scroll
+  // Fade-in animation
   const faders = document.querySelectorAll('.fade-in');
   const appearOptions = { threshold: 0.1 };
   const appearOnScroll = new IntersectionObserver(function(entries, observer){
@@ -283,22 +273,32 @@
   }, appearOptions);
   faders.forEach(fader => { appearOnScroll.observe(fader); });
 
-  // Particle background
+  // Particle stars with fun facts
   const canvas = document.createElement('canvas');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   document.querySelector('.particles').appendChild(canvas);
   const ctx = canvas.getContext('2d');
+
   let particlesArray = [];
-  const particleCount = 100;
-  
+  const particleCount = 80;
+
+  const funFacts = [
+    "Lucky started making music at 12!",
+    "I ride dirt bikes and ATVs.",
+    "An insane album is coming out soon!",
+    "I do other stuff besides music too.",
+    "High-energy, genre-switching beats await!"
+  ];
+
   class Particle {
     constructor(){
       this.x = Math.random()*canvas.width;
       this.y = Math.random()*canvas.height;
-      this.size = Math.random()*2+1;
-      this.speedX = (Math.random()-0.5)/2;
-      this.speedY = (Math.random()-0.5)/2;
+      this.size = Math.random()*2+1.5;
+      this.speedX = (Math.random()-0.5)/1.5;
+      this.speedY = (Math.random()-0.5)/1.5;
+      this.fact = funFacts[Math.floor(Math.random()*funFacts.length)];
     }
     update(){
       this.x += this.speedX;
@@ -314,19 +314,51 @@
     }
   }
 
+  const tooltip = document.createElement('div');
+  tooltip.style.position = 'fixed';
+  tooltip.style.padding = '5px 10px';
+  tooltip.style.background = 'rgba(0,0,0,0.8)';
+  tooltip.style.color = '#8affff';
+  tooltip.style.borderRadius = '8px';
+  tooltip.style.fontSize = '0.9rem';
+  tooltip.style.pointerEvents = 'none';
+  tooltip.style.opacity = 0;
+  tooltip.style.transition = 'opacity 0.2s ease';
+  document.body.appendChild(tooltip);
+
   function initParticles(){
     particlesArray = [];
     for(let i=0;i<particleCount;i++){
       particlesArray.push(new Particle());
     }
   }
+
   function animateParticles(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     particlesArray.forEach(p => { p.update(); p.draw(); });
     requestAnimationFrame(animateParticles);
   }
+
+  canvas.addEventListener('mousemove', (e)=>{
+    let found = false;
+    particlesArray.forEach(p => {
+      const dx = e.clientX - p.x;
+      const dy = e.clientY - p.y;
+      const distance = Math.sqrt(dx*dx + dy*dy);
+      if(distance < 10){
+        tooltip.style.left = (p.x + 15) + 'px';
+        tooltip.style.top = (p.y - 15) + 'px';
+        tooltip.textContent = p.fact;
+        tooltip.style.opacity = 1;
+        found = true;
+      }
+    });
+    if(!found) tooltip.style.opacity = 0;
+  });
+
   initParticles();
   animateParticles();
+
   window.addEventListener('resize', ()=>{
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
