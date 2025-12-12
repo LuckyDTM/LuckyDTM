@@ -4,31 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUCKYDTM</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  *{margin:0; padding:0; box-sizing:border-box;}
+  /* Reset & basics */
+  *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    font-family:'Roboto', sans-serif;
-    overflow-x:hidden;
+    font-family:'Space Grotesk', sans-serif;
     color:#fff;
-    background: linear-gradient(270deg,#0d0d1a,#0d1a3a,#001a33,#0d1a3a,#0d0d1a);
-    background-size: 1000% 1000%;
-    animation: gradientBG 20s ease infinite;
+    overflow-x:hidden;
+    min-height:100vh;
+    background:#0b0b17;
   }
-  @keyframes gradientBG {
+
+  a{text-decoration:none;color:inherit;}
+
+  /* Animated background with subtle particles */
+  body::before{
+    content:'';
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background: linear-gradient(45deg,#0d1a3a,#001a33,#0d0d1a,#0d1a3a,#001a33);
+    background-size: 600% 600%;
+    animation: gradientBG 20s ease infinite;
+    z-index:-2;
+  }
+  body::after{
+    content:'';
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:url('https://i.ibb.co/qg1Yb5V/particles.png'); /* subtle particles overlay */
+    background-size:cover;
+    opacity:0.05;
+    z-index:-1;
+  }
+  @keyframes gradientBG{
     0%{background-position:0% 50%;}
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
   }
 
-  a{text-decoration:none;color:inherit;}
-
-  /* Top nav bar */
+  /* Top navigation */
   nav{
     position:fixed;
-    top:0;
-    left:0;
+    top:0;left:0;
     width:100%;
     display:flex;
     justify-content:center;
@@ -38,28 +59,28 @@
     z-index:999;
   }
   nav ul{
-    list-style:none;
     display:flex;
-    gap:2rem;
+    list-style:none;
+    gap:2.5rem;
     font-family:'Orbitron', sans-serif;
     font-weight:700;
+    font-size:1.1rem;
   }
   nav ul li{
     cursor:pointer;
-    padding:0.5rem 1rem;
-    border-radius:8px;
+    padding:0.5rem 1.2rem;
+    border-radius:12px;
     transition: all 0.3s ease;
   }
-  nav ul li.active,
-  nav ul li:hover{
-    background:#8affff;
-    color:#0d0d1a;
+  nav ul li:hover, nav ul li.active{
+    background:#00d4ff;
+    color:#0b0b17;
   }
 
   /* Tab content */
   .tab-content{
     min-height:100vh;
-    padding:200px 10%;
+    padding:220px 10%;
     display:none;
     flex-direction:column;
     align-items:center;
@@ -71,26 +92,25 @@
     opacity:1;
   }
 
-  /* Main Title */
-  h1{
+  /* Main title */
+  h1.main-title{
     font-family:'Orbitron', sans-serif;
     font-size:6rem;
-    color:#0d1a3a;
-    background: linear-gradient(90deg,#0d1a3a,#00d4ff,#8affff);
-    -webkit-background-clip:text;
+    color:#8affff;
     -webkit-text-fill-color:transparent;
-    text-shadow: 0 0 8px #fff, 0 0 12px #8affff, 0 0 18px #00d4ff;
+    background: linear-gradient(90deg,#8affff,#00d4ff);
+    -webkit-background-clip:text;
     margin-bottom:1rem;
-    transition: all 0.5s ease;
+    text-shadow: 0 0 5px rgba(0,212,255,0.5);
+    transition: all 0.3s ease;
   }
-
   .subtitle{
-    font-size:1.5rem;
+    font-size:1.6rem;
     color:#ccc;
     margin-bottom:3rem;
   }
 
-  /* Social Icons */
+  /* Socials grid */
   .socials{
     display:flex;
     gap:2rem;
@@ -104,27 +124,27 @@
   }
   .socials a:hover img{
     transform:scale(1.2);
-    filter:drop-shadow(0 0 20px #8affff);
+    filter:drop-shadow(0 0 15px #00d4ff);
   }
 
   /* Music Grid */
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:2rem;
+    gap:2.5rem;
     width:100%;
   }
   .track-card{
-    background: rgba(20,20,50,0.7);
-    border-radius:20px;
+    background: rgba(20,20,50,0.6);
+    border-radius:25px;
     padding:1.5rem;
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow:hidden;
     text-align:center;
   }
   .track-card:hover{
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(138,255,255,0.4);
+    transform: translateY(-12px);
+    box-shadow: 0 12px 35px rgba(0,212,255,0.5);
   }
   .track-card iframe{
     width:100%;
@@ -132,22 +152,25 @@
     margin-top:1rem;
   }
 
-  #about img{
-    width:320px;
-    border-radius:20px;
+  /* About */
+  #description img{
+    width:350px;
+    border-radius:25px;
     margin-bottom:1rem;
   }
-  #about p{
-    max-width:650px;
+  #description p{
+    max-width:700px;
     color:#ccc;
     line-height:1.6;
     margin-top:1rem;
+    font-size:1.1rem;
   }
 
   @media(max-width:768px){
-    h1{font-size:4rem;}
+    h1.main-title{font-size:4rem;}
     .grid{grid-template-columns:1fr;}
   }
+
 </style>
 </head>
 <body>
@@ -161,10 +184,10 @@
   </ul>
 </nav>
 
-<!-- Tab: Socials -->
+<!-- Socials Tab -->
 <section id="socials" class="tab-content active">
-  <h1>LUCKYDTM</h1>
-  <p class="subtitle">Connect with Lucky DTM on socials</p>
+  <h1 class="main-title">LUCKYDTM</h1>
+  <p class="subtitle">Connect with Lucky on Socials</p>
   <div class="socials">
     <a href="https://www.youtube.com/@LuckyDTM" target="_blank">
       <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png" alt="YouTube">
@@ -178,9 +201,9 @@
   </div>
 </section>
 
-<!-- Tab: Music -->
+<!-- Music Tab -->
 <section id="music" class="tab-content">
-  <h1>LUCKYDTM Music</h1>
+  <h1 class="main-title">Music</h1>
   <p class="subtitle">High-energy, genre-switching tracks</p>
   <div class="grid">
     <div class="track-card">
@@ -195,12 +218,12 @@
   </div>
 </section>
 
-<!-- Tab: Description -->
+<!-- Description Tab -->
 <section id="description" class="tab-content">
-  <h1>About Lucky</h1>
+  <h1 class="main-title">About Lucky</h1>
   <img src="https://yt3.googleusercontent.com/tYkUvt4AHQYVgQ7y8D-w7U5mbpf5HPiqTqGjHTq60ASe0bx9yaGLIVz4GizTnwz_bA3cwVe1bg=s160-c-k-c0x00ffffff-no-rj" alt="Lucky">
   <p>
-    Lucky creates music for rhythm games. High-energy, genre-switching electronic music blending cinematic elements, intense beats, and immersive atmospheres. Started making music at 12, rides dirt bikes/ATVs, and has an insane album coming soon!
+    Lucky creates music for rhythm games. His sound blends cinematic intros, chaotic drops, intense beats, and genre-switching elements. Started at 12, rides dirt bikes/ATVs, and has an insane album dropping soon. This is high-energy electronic music you don’t click away from.
   </p>
 </section>
 
