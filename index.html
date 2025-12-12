@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky — Electronic Music Producer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Reset & base */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: #0d0d1a;
+    color: #fff;
+    overflow-x: hidden;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* Cosmic background */
+  body::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #3f0d77 0%, #0d0d1a 100%);
+    z-index: -2;
+  }
+  .particles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Common buttons */
+  .btn {
+    display: inline-block;
+    margin: 0.5rem;
+    padding: 0.75rem 2rem;
+    border: 2px solid #8affff;
+    border-radius: 30px;
+    color: #8affff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    background: #8affff;
+    color: #0d0d1a;
+  }
+
+  /* Sections */
+  section { padding: 100px 10%; position: relative; }
+
+  /* Hero Section */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  #hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    background: linear-gradient(90deg, #8affff, #ff6eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  #hero p {
+    font-size: 1.3rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+  }
+
+  /* Music Section */
+  #music .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+  .track-card {
+    background: rgba(20, 20, 50, 0.7);
+    border-radius: 15px;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+  .track-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(138, 255, 255, 0.3);
+  }
+  .track-card iframe {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  /* Featured Project */
+  #featured {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+  }
+  #featured img {
+    max-width: 400px;
+    border-radius: 20px;
+  }
+  #featured .desc {
+    max-width: 500px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ddd;
+  }
+
+  /* About */
+  #about {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+  }
+  #about img {
+    width: 300px;
+    border-radius: 20px;
+  }
+  #about p {
+    max-width: 500px;
+    line-height: 1.6;
+    color: #ccc;
+  }
+
+  /* Contact */
+  #contact {
+    text-align: center;
+  }
+  #contact form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
+  }
+  #contact input, #contact textarea {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+  }
+  #contact button {
+    border-radius: 20px;
+    padding: 0.75rem;
+    border: 2px solid #8affff;
+    background: transparent;
+    color: #8affff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  #contact button:hover {
+    background: #8affff;
+    color: #0d0d1a;
+  }
+
+  /* Socials */
+  .socials a {
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+    color: #8affff;
+    transition: color 0.3s;
+  }
+  .socials a:hover {
+    color: #ff6eff;
+  }
+
+  /* Smooth fade-in */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media(max-width:768px){
+    #hero h1 { font-size: 2.5rem; }
+    #hero p { font-size: 1.1rem; }
+    #featured { flex-direction: column; }
+    #about { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="particles"></div>
+
+<!-- Hero Section -->
+<section id="hero">
+  <h1>Lucky — Electronic Music Producer</h1>
+  <p>Creator of high-energy, genre-switching electronic music.</p>
+  <div>
+    <a href="#music" class="btn">Listen</a>
+    <a href="#featured" class="btn">Projects</a>
+    <a href="#contact" class="btn">Contact</a>
+  </div>
+</section>
+
+<!-- Music Section -->
+<section id="music">
+  <h2 class="fade-in">Music</h2>
+  <div class="grid fade-in">
+    <div class="track-card">
+      <h3>Track 1</h3>
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="track-card">
+      <h3>Track 2</h3>
+      <iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789" frameborder="0"></iframe>
+    </div>
+    <div class="track-card">
+      <h3>Track 3</h3>
+      <iframe src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC" frameborder="0"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Project -->
+<section id="featured">
+  <h2 class="fade-in">Featured Project — Multiversal Transcend</h2>
+  <div class="fade-in" style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
+    <img src="https://via.placeholder.com/400x400.png?text=Artwork" alt="Multiversal Transcend Artwork">
+    <div class="desc">
+      <p>A collapsing multiverse. A lone character facing despair, fear, and ultimate transcendence. A journey told through massive genre shifts and emotional sound design.</p>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <h2 class="fade-in">About Lucky</h2>
+  <div class="fade-in" style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
+    <img src="https://via.placeholder.com/300x300.png?text=Lucky" alt="Lucky">
+    <p>Lucky creates emotionally charged electronic music with cinematic intros, intense beat switches, orchestral influence, and chaotic high-energy drops. The sound blends artcore, dubstep, speedcore, melodic elements, and cosmic atmospheres.</p>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <h2 class="fade-in">Contact</h2>
+  <div class="fade-in">
+    <div class="socials">
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+      <a href="#">SoundCloud</a>
+      <a href="#">Spotify</a>
+    </div>
+    <form>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Email" required>
+      <textarea rows="5" placeholder="Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Fade-in on scroll
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOptions = { threshold: 0.1 };
+  const appearOnScroll = new IntersectionObserver(function(entries, observer){
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, appearOptions);
+
+  faders.forEach(fader => { appearOnScroll.observe(fader); });
+
+  // Particle background
+  const canvas = document.createElement('canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.querySelector('.particles').appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let particlesArray = [];
+  const particleCount = 100;
+  
+  class Particle {
+    constructor(){
+      this.x = Math.random()*canvas.width;
+      this.y = Math.random()*canvas.height;
+      this.size = Math.random()*2+1;
+      this.speedX = (Math.random()-0.5)/2;
+      this.speedY = (Math.random()-0.5)/2;
+    }
+    update(){
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw(){
+      ctx.fillStyle = 'rgba(138,255,255,0.7)';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function initParticles(){
+    particlesArray = [];
+    for(let i=0;i<particleCount;i++){
+      particlesArray.push(new Particle());
+    }
+  }
+  function animateParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+  }
+  initParticles();
+  animateParticles();
+  window.addEventListener('resize', ()=>{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+  });
+</script>
+
+</body>
+</html>
