@@ -190,7 +190,7 @@
 
         .typewriter { font-size: 0.9rem; line-height: 1.8; color: #bbb; min-height: 150px; }
 
-        /* --- NEW AUDIO PLAYER STYLES --- */
+        /* --- AUDIO PLAYER STYLES --- */
         .audio-terminal {
             border: 1px solid #333;
             background: rgba(0, 5, 10, 0.8);
@@ -239,7 +239,7 @@
             font-size: 0.8rem;
             color: #666;
         }
-        /* Fake visualizer bars */
+        /* VISUALIZER BARS */
         .visualizer {
             display: flex;
             gap: 2px;
@@ -251,8 +251,8 @@
         .v-bar {
             width: 4px;
             background: var(--cyan);
-            height: 20%;
-            transition: height 0.1s;
+            height: 2px; /* Start small */
+            /* Removed slow transition for snappy, real-time response */
         }
         .playing .visualizer { opacity: 1; }
 
@@ -360,7 +360,7 @@
 
             <div class="audio-terminal tech-corners">
                 <div class="audio-terminal-header">
-                    <span>AUDIO_INTERCEPT // FRAGMENT_01</span>
+                    <span>MULTIVERSAL TRANSCEND // CROSSFADE</span>
                     <span style="color:#555">SOURCE: UNKNOWN</span>
                 </div>
                 
@@ -376,7 +376,7 @@
                     <div class="visualizer" id="visualizer">
                         </div>
                 </div>
-                <audio id="sneak-audio" style="display:none;"></audio>
+                <audio id="sneak-audio" crossorigin="anonymous" style="display:none;"></audio>
             </div>
             </section>
 
@@ -492,24 +492,70 @@
             requestAnimationFrame(animateParticles);
         }
 
-        /* --- 5. AUDIO DECRYPTER LOGIC --- */
+        /* --- 5. REAL AUDIO VISUALIZER LOGIC (WEB AUDIO API) --- */
         const playBtn = document.getElementById('play-trigger');
         const statusText = document.getElementById('audio-status-text');
         const audioEl = document.getElementById('sneak-audio');
         const visualizer = document.getElementById('visualizer');
         const audioContainer = document.getElementById('audio-container');
 
-        // Create visualizer bars
-        for(let i=0; i<20; i++) {
+        // Number of bars
+        const BAR_COUNT = 32;
+        // Create DOM bars
+        for(let i=0; i<BAR_COUNT; i++) {
             const bar = document.createElement('div');
             bar.className = 'v-bar';
             visualizer.appendChild(bar);
         }
         
+        let audioCtx, analyser, source;
         let isPlaying = false;
-        let vizInterval;
+        let animationId;
+
+        function setupAudioContext() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 64; // Low res FFT for chunkier bars
+                
+                source = audioCtx.createMediaElementSource(audioEl);
+                source.connect(analyser);
+                source.connect(audioCtx.destination);
+            }
+        }
+
+        function renderFrame() {
+            animationId = requestAnimationFrame(renderFrame);
+            
+            if(!analyser) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            analyser.getByteFrequencyData(dataArray);
+
+            const bars = document.querySelectorAll('.v-bar');
+            
+            // Map frequency data to our bars
+            for(let i = 0; i < BAR_COUNT; i++) {
+                if(bars[i]) {
+                    // Normalize the value (0-255) to a percentage height
+                    // We skip the very first few frequencies as they can be messy DC offsets
+                    const value = dataArray[i]; 
+                    const percent = (value / 255) * 100;
+                    // Ensure at least a tiny line shows
+                    bars[i].style.height = Math.max(percent, 5) + '%';
+                }
+            }
+        }
 
         playBtn.addEventListener('click', async () => {
+            // 1. Initialize Audio Context on first click (Browser Policy)
+            setupAudioContext();
+            if(audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
+
             if(isPlaying) {
                 // Pause Logic
                 audioEl.pause();
@@ -518,7 +564,7 @@
                 statusText.innerText = "SIGNAL PAUSED";
                 statusText.style.color = "#666";
                 audioContainer.classList.remove('playing');
-                clearInterval(vizInterval);
+                cancelAnimationFrame(animationId);
                 return;
             }
 
@@ -530,7 +576,7 @@
                 statusText.innerText = "PLAYING ARTIFACT...";
                 statusText.style.color = "var(--cyan)";
                 audioContainer.classList.add('playing');
-                startVisualizer();
+                renderFrame(); // Start real visualizer loop
                 return;
             }
 
@@ -561,7 +607,7 @@
                 statusText.innerText = "DECRYPTION SUCCESSFUL. PLAYING.";
                 statusText.style.color = "var(--cyan)";
                 audioContainer.classList.add('playing');
-                startVisualizer();
+                renderFrame(); // Start real visualizer loop
 
             } catch (err) {
                 console.error(err);
@@ -572,28 +618,15 @@
             }
         });
 
-        // Simple Fake Visualizer Animation
-        function startVisualizer() {
-            const bars = document.querySelectorAll('.v-bar');
-            clearInterval(vizInterval);
-            vizInterval = setInterval(() => {
-                bars.forEach(bar => {
-                    // Random height between 20% and 100%
-                    const h = Math.floor(Math.random() * 80) + 20;
-                    bar.style.height = `${h}%`;
-                });
-            }, 100);
-        }
-
         audioEl.onended = () => {
             isPlaying = false;
             playBtn.innerText = "REPLAY FRAGMENT";
             statusText.innerText = "END OF TRANSMISSION.";
             statusText.style.color = "#666";
             audioContainer.classList.remove('playing');
-            clearInterval(vizInterval);
+            cancelAnimationFrame(animationId);
             // Reset bars
-            document.querySelectorAll('.v-bar').forEach(b => b.style.height = '20%');
+            document.querySelectorAll('.v-bar').forEach(b => b.style.height = '2px');
         };
 
         /* --- 6. INIT SEQUENCE --- */
