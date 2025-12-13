@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUCKY /// SYSTEM_V7.4_CONTACT</title>
+    <title>LUCKY-OFFICIAL</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -293,10 +293,9 @@
             letter-spacing: 1px;
         }
 
-        /* SOCIALS (UPDATED FOR 4 ITEMS) */
+        /* SOCIALS */
         .social-grid { 
             display: grid; 
-            /* This ensures 2x2 grid when there are 4 items */
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 15px; 
         }
@@ -382,7 +381,7 @@
         <div style="color:var(--accent)">STATUS: ONLINE</div>
         <div>SESSION: <span id="sessionTimer">00:00</span></div>
         <div>LOCAL: <span id="localClock">00:00</span></div>
-        <div>V7.4.0</div>
+        <div>V7.5.0</div>
     </div>
 
     <div id="loader">
@@ -546,9 +545,10 @@
                         <h3>DISCORD</h3>
                         <span>CHAT</span>
                     </a>
-                    <a href="mailto:luckyofficialcontact@gmail.com?subject=INQUIRY // PROJECT: LUCKY" class="social-card tilt-box">
+                    
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=luckyofficialcontact@gmail.com&su=INQUIRY // PROJECT: LUCKY" target="_blank" class="social-card tilt-box">
                         <h3>CONTACT</h3>
-                        <span>SECURE MAIL</span>
+                        <span>SECURE GMAIL</span>
                     </a>
                 </div>
             </div>
@@ -572,7 +572,7 @@
                 grid: document.getElementById('gridToggle').checked,
                 // Bloom NOT saved
             };
-            localStorage.setItem('luckySystemSettingsV74', JSON.stringify(settings));
+            localStorage.setItem('luckySystemSettingsV75', JSON.stringify(settings));
         }
 
         function setTheme(color) {
@@ -612,12 +612,12 @@
         }
 
         function resetConfig() {
-            localStorage.removeItem('luckySystemSettingsV74');
+            localStorage.removeItem('luckySystemSettingsV75');
             location.reload(); 
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('luckySystemSettingsV74');
+            const saved = localStorage.getItem('luckySystemSettingsV75');
             if (saved) {
                 const s = JSON.parse(saved);
                 document.documentElement.style.setProperty('--accent', s.theme);
