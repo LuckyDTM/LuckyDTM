@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUCKY /// OFFICIAL</title>
+    <title>LUCKY /// ULTIMATE_SYSTEM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@100;400;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@400;700&family=Syncopate:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -26,572 +26,559 @@
     </script>
 
     <style>
-        /* --- 0. THEME VARIABLES (DEFAULT: CYBERPUNK) --- */
+        /* =========================================
+           1. BASE VARIABLES & RESET
+           ========================================= */
         :root {
-            /* Colors */
-            --bg: #050505;
-            --card-bg: rgba(15, 15, 15, 0.9);
-            --text-main: #eaeaea;
-            --text-muted: #888;
-            --accent: #00f3ff; /* Cyan Default */
-            --accent-glow: rgba(0, 243, 255, 0.3);
-            --border: rgba(255, 255, 255, 0.1);
-            
-            /* Fonts */
-            --font-display: 'Syncopate', sans-serif;
-            --font-body: 'JetBrains Mono', monospace;
-            
-            /* FX */
-            --scanline-opacity: 0.1;
-            --glitch-active: 1; /* 1 = on, 0 = off */
+            --transition-speed: 0.5s;
         }
 
-        /* --- CLASSIC THEME OVERRIDES --- */
-        [data-theme="classic"] {
-            --bg: #f4f4f5;
-            --card-bg: #ffffff;
-            --text-main: #18181b;
-            --text-muted: #52525b;
-            --accent: #2563eb; /* Royal Blue */
-            --accent-glow: rgba(37, 99, 235, 0.1);
-            --border: #e4e4e7;
-            
-            --font-display: 'Inter', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            
-            --scanline-opacity: 0;
-            --glitch-active: 0;
-        }
-
-        /* --- MIDNIGHT THEME OVERRIDES --- */
-        [data-theme="midnight"] {
-            --bg: #0f0a1e;
-            --card-bg: rgba(25, 20, 40, 0.9);
-            --text-main: #eebbff;
-            --text-muted: #9988aa;
-            --accent: #ff00ff; /* Magenta */
-            --accent-glow: rgba(255, 0, 255, 0.3);
-            --border: rgba(255, 0, 255, 0.2);
-            --font-display: 'Syncopate', sans-serif;
-            --font-body: 'JetBrains Mono', monospace;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: var(--font-body);
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* --- FX LAYERS --- */
+        /* =========================================
+           2. THEME DEFINITIONS (THE MAGIC)
+           ========================================= */
+
+        /* --- MODE A: SYSTEM (Default / Cyberpunk) --- */
+        body.mode-system {
+            background-color: #050505;
+            color: #eaeaea;
+            font-family: 'JetBrains Mono', monospace;
+            --accent: #00f3ff;
+            --bg-card: rgba(15, 15, 15, 0.9);
+            --border: 1px solid rgba(0, 243, 255, 0.2);
+            --font-head: 'Syncopate', sans-serif;
+            cursor: crosshair;
+        }
+        body.mode-system .scanlines { display: block; }
+        body.mode-system .hero-title { text-shadow: 3px 0 var(--accent); }
+        body.mode-system .card-container { transform-style: preserve-3d; perspective: 1000px; } /* Enables Tilt */
+
+        /* --- MODE B: CLEAN (Simple / Light) --- */
+        body.mode-clean {
+            background-color: #f4f4f5;
+            color: #18181b;
+            font-family: 'Inter', sans-serif;
+            --accent: #2563eb;
+            --bg-card: #ffffff;
+            --border: 1px solid #e4e4e7;
+            --font-head: 'Inter', sans-serif;
+            cursor: default;
+        }
+        body.mode-clean .scanlines { display: none; }
+        body.mode-clean #particle-canvas { opacity: 0.2; } /* Faint particles */
+        body.mode-clean .hero-title { font-weight: 800; letter-spacing: -2px; color: #000; text-shadow: none; }
+        body.mode-clean .nav-btn { border-radius: 6px; }
+        body.mode-clean .hero-sub { color: #52525b; border-left: none; }
+        
+        /* --- MODE C: TERMINAL (Retro / Hacker) --- */
+        body.mode-terminal {
+            background-color: #000000;
+            color: #33ff00;
+            font-family: 'VT323', monospace;
+            --accent: #33ff00;
+            --bg-card: #000000;
+            --border: 1px dashed #33ff00;
+            --font-head: 'VT323', monospace;
+            cursor: text;
+        }
+        body.mode-terminal .scanlines { 
+            display: block; 
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 0, 0.1) 50%);
+            background-size: 100% 4px;
+        }
+        body.mode-terminal .hero-title { font-size: 6rem; text-shadow: 0 0 10px #33ff00; }
+        body.mode-terminal .nav-btn { text-transform: lowercase; }
+        body.mode-terminal .profile-img { filter: grayscale(100%) contrast(200%) brightness(0.8) sepia(100%) hue-rotate(50deg) saturate(500%); }
+        body.mode-terminal ::selection { background: #33ff00; color: #000; }
+
+        /* =========================================
+           3. GLOBAL ELEMENTS
+           ========================================= */
+        
+        /* FX LAYERS */
         .scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
-            z-index: 9000; pointer-events: none; opacity: var(--scanline-opacity);
+            background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
+            background-size: 100% 3px; pointer-events: none; z-index: 900;
         }
-
         #particle-canvas { position: fixed; top:0; left:0; width: 100%; height: 100%; z-index: -1; }
 
-        /* --- LAYOUT --- */
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; padding-bottom: 100px;}
-
-        /* --- HEADER / HERO --- */
-        header { 
-            padding: 100px 0 60px 0; 
-            text-align: center; 
+        /* SETTINGS UI */
+        .settings-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 2000;
+            background: var(--bg-card); border: var(--border); color: var(--accent);
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border-radius: 50%;
         }
-
-        h1.hero-title {
-            font-family: var(--font-display);
-            font-size: 5rem; 
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 10px;
-            color: var(--text-main);
-            position: relative;
+        .settings-menu {
+            position: fixed; top: 70px; right: 20px; z-index: 2000;
+            background: var(--bg-card); border: var(--border); padding: 20px;
+            width: 260px; display: none; backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-
-        /* Glitch effect only active if theme allows */
-        .glitch-active {
-            text-shadow: 3px 0 var(--accent), -3px 0 red;
+        .settings-menu.open { display: block; animation: slideDown 0.3s; }
+        @keyframes slideDown { from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);} }
+        
+        .mode-select-btn {
+            display: block; width: 100%; padding: 10px; margin-bottom: 8px;
+            background: transparent; border: var(--border); color: inherit;
+            cursor: pointer; font-family: inherit; text-align: left;
         }
+        .mode-select-btn:hover { background: var(--accent); color: #000; }
 
+        /* SIDEBAR STATS (NEW FEATURE) */
+        .sidebar {
+            position: fixed; top: 50%; left: 20px; transform: translateY(-50%);
+            writing-mode: vertical-rl; text-orientation: mixed;
+            font-size: 0.7rem; color: #666; z-index: 100;
+            display: flex; gap: 20px; pointer-events: none;
+        }
+        /* Hide sidebar on mobile */
+        @media(max-width: 900px) { .sidebar { display: none; } }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px 100px 20px; }
+
+        /* HERO */
+        header { padding: 120px 0 60px 0; text-align: center; }
+        .hero-title {
+            font-family: var(--font-head); font-size: 5rem; font-weight: 700;
+            margin-bottom: 10px; color: inherit;
+        }
         .hero-sub {
-            color: var(--accent);
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 1rem; color: var(--accent); letter-spacing: 3px;
         }
 
-        /* --- SETTINGS BUTTON --- */
-        .settings-toggle {
-            position: fixed; top: 20px; right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 2000;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .settings-toggle:hover { color: var(--accent); border-color: var(--accent); }
-
-        /* --- SETTINGS PANEL --- */
-        .settings-panel {
-            position: fixed; top: 70px; right: 20px;
-            width: 250px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 20px;
-            z-index: 2000;
-            border-radius: 8px;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
-        .settings-panel.open { display: block; animation: slideIn 0.3s; }
-        @keyframes slideIn { from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);} }
-
-        .setting-group { margin-bottom: 20px; }
-        .setting-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; display: block; text-transform: uppercase;}
-        
-        .theme-btn {
-            display: block; width: 100%; padding: 8px; margin-bottom: 5px;
-            background: transparent; border: 1px solid var(--border);
-            color: var(--text-main); cursor: pointer; text-align: left;
-            border-radius: 4px; font-family: var(--font-body);
-        }
-        .theme-btn:hover, .theme-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-
-        /* --- NAVIGATION TABS --- */
-        .nav-deck {
-            display: flex; justify-content: center; gap: 10px;
-            margin-bottom: 50px; flex-wrap: wrap;
-        }
+        /* NAVIGATION */
+        .nav-deck { display: flex; justify-content: center; gap: 10px; margin-bottom: 50px; flex-wrap: wrap; }
         .nav-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 12px 24px;
-            cursor: pointer;
-            font-family: var(--font-display);
+            background: var(--bg-card); border: var(--border); color: inherit;
+            padding: 12px 25px; cursor: pointer; font-family: var(--font-head);
             font-size: 0.9rem;
-            transition: 0.2s;
-            border-radius: 4px;
         }
-        .nav-btn:hover { color: var(--text-main); border-color: var(--text-main); }
-        .nav-btn.active {
-            background: var(--accent);
-            color: #000; /* Contrast text */
-            border-color: var(--accent);
-            font-weight: bold;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-        /* Classic Theme Nav Adjust */
-        [data-theme="classic"] .nav-btn.active { color: #fff; }
+        .nav-btn:hover, .nav-btn.active { background: var(--accent); color: #000; font-weight: bold; }
 
-        /* --- TAB CONTENT --- */
-        .tab-content { display: none; animation: fadeIn 0.4s; }
+        /* CONTENT TABS */
+        .tab-content { display: none; animation: fadeIn 0.5s; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-        /* --- OVERVIEW CARD --- */
-        .profile-section {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-            align-items: center;
+        /* CARDS & LAYOUTS */
+        .profile-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        
+        .card-container {
+            background: var(--bg-card); border: var(--border);
+            padding: 30px; position: relative; transition: transform 0.1s;
         }
+        
         .profile-img {
-            background: linear-gradient(45deg, #111, #222);
-            height: 300px; display: flex; align-items: center; justify-content: center;
-            border-radius: 12px; border: 1px solid var(--border);
-            position: relative; overflow: hidden;
+            height: 300px; background: #111; display: flex; align-items: center; justify-content: center;
+            border: var(--border); overflow: hidden; position: relative;
         }
-        /* M Symbol */
-        .profile-img h2 { font-size: 8rem; color: var(--text-main); opacity: 0.1; }
+        .profile-img h1 { font-size: 10rem; opacity: 0.1; color: var(--accent); }
 
-        .profile-info h2 { font-size: 2rem; margin-bottom: 15px; color: var(--text-main); font-family: var(--font-display); }
-        .profile-info p { line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; }
+        h2 { font-family: var(--font-head); margin-bottom: 15px; color: var(--accent); }
+        p { line-height: 1.6; margin-bottom: 15px; opacity: 0.9; }
+
+        /* AUDIO PLAYER */
+        .audio-wrapper {
+            margin-top: 30px; padding: 20px;
+            background: rgba(0,0,0,0.2); border: var(--border);
+        }
+        .player-controls { display: flex; align-items: center; gap: 15px; }
+        .play-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--accent); border: none; color: #000;
+            cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+        }
+        .play-btn:hover { transform: scale(1.1); }
         
-        .highlight { color: var(--accent); font-weight: bold; }
+        .viz-box { display: flex; gap: 2px; height: 20px; align-items: flex-end; opacity: 0.5; }
+        .bar { width: 4px; background: var(--accent); height: 5px; transition: height 0.1s; }
 
-        /* --- AUDIO PLAYER --- */
-        .audio-player {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            position: relative;
-        }
-        .player-row { display: flex; align-items: center; gap: 15px; }
-        
-        .play-btn-circle {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: var(--accent); border: none;
-            color: #fff; font-size: 1.2rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s;
-        }
-        .play-btn-circle:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-glow); }
-
-        .track-display { flex-grow: 1; }
-        .track-title { display: block; font-weight: bold; color: var(--text-main); font-size: 0.9rem; }
-        .track-status { font-size: 0.75rem; color: var(--text-muted); }
-
-        /* Fake Visualizer */
-        .viz-bars { display: flex; gap: 3px; height: 20px; align-items: flex-end; }
-        .bar { width: 4px; background: var(--text-muted); height: 5px; border-radius: 2px; }
-        .playing .bar { background: var(--accent); animation: bounce 0.5s infinite alternate; }
-        @keyframes bounce { 0% {height: 20%;} 100% {height: 100%;} }
-
-        /* Volume Slider */
-        .vol-slider { width: 80px; accent-color: var(--accent); }
-
-        /* --- RELEASES TAB --- */
-        .release-list { list-style: none; }
+        /* RELEASES LIST */
         .release-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 20px; margin-bottom: 10px;
-            border-radius: 6px;
-            display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-card); border: var(--border);
+            padding: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
         }
-        .release-info h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 5px; }
-        .release-info span { color: var(--text-muted); font-size: 0.85rem; }
-        
-        .status-badge {
-            background: var(--border); color: var(--text-muted);
-            padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;
-            letter-spacing: 1px;
-        }
+        .tag { background: var(--accent); color: #000; padding: 2px 8px; font-size: 0.7rem; font-weight: bold; }
 
-        /* --- DATA / FAQ TAB --- */
-        .faq-block { margin-bottom: 25px; }
-        .faq-block h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 10px; font-family: var(--font-display); }
-        .faq-block p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        /* FAQ ITEMS */
+        .faq-item { margin-bottom: 20px; border-bottom: var(--border); padding-bottom: 20px; }
+        .faq-q { font-size: 1.1rem; margin-bottom: 5px; cursor: pointer; }
+        .faq-q:hover { color: var(--accent); }
+        .faq-a { font-size: 0.9rem; opacity: 0.8; }
 
-        /* --- UPLINKS TAB --- */
-        .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        /* LINKS GRID */
+        .link-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .link-card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 30px; text-align: center; border-radius: 8px;
-            text-decoration: none; color: var(--text-main); transition: 0.3s;
+            background: var(--bg-card); border: var(--border); padding: 30px;
+            text-align: center; text-decoration: none; color: inherit; display: block;
         }
-        .link-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .link-card:hover { border-color: var(--accent); transform: translateY(-5px); }
         .link-card i { font-size: 2rem; margin-bottom: 10px; color: var(--accent); }
-        .link-card h4 { margin-bottom: 5px; }
 
-        /* MOBILE */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 3rem; }
-            .profile-section { grid-template-columns: 1fr; }
-            .profile-img { height: 200px; }
+        @media(max-width: 800px) {
+            .profile-grid, .link-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 12vw; }
         }
 
     </style>
 </head>
-<body data-theme="default">
-
-    <div class="settings-toggle" onclick="toggleSettings()">
-        <i class="fa-solid fa-gear"></i>
-    </div>
-
-    <div class="settings-panel" id="settingsPanel">
-        <h3 style="margin-bottom: 15px; color: var(--text-main);">UI SETTINGS</h3>
-        
-        <div class="setting-group">
-            <span class="setting-label">THEME SELECTION</span>
-            <button class="theme-btn active" onclick="setTheme('default')">
-                <i class="fa-solid fa-terminal"></i> SYSTEM DEFAULT (Cyberpunk)
-            </button>
-            <button class="theme-btn" onclick="setTheme('classic')">
-                <i class="fa-solid fa-ghost"></i> CLASSIC (Clean/Light)
-            </button>
-            <button class="theme-btn" onclick="setTheme('midnight')">
-                <i class="fa-solid fa-moon"></i> MIDNIGHT (Retro Purple)
-            </button>
-        </div>
-
-        <div class="setting-group">
-            <span class="setting-label">ACCENT COLOR</span>
-            <div style="display: flex; gap: 10px;">
-                <div onclick="setAccent('#00f3ff')" style="width:25px; height:25px; background:#00f3ff; border-radius:50%; cursor:pointer; border:1px solid #fff;"></div>
-                <div onclick="setAccent('#ff0055')" style="width:25px; height:25px; background:#ff0055; border-radius:50%; cursor:pointer; border:1px solid #fff;"></div>
-                <div onclick="setAccent('#44ff00')" style="width:25px; height:25px; background:#44ff00; border-radius:50%; cursor:pointer; border:1px solid #fff;"></div>
-                <div onclick="setAccent('#ffaa00')" style="width:25px; height:25px; background:#ffaa00; border-radius:50%; cursor:pointer; border:1px solid #fff;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="scanlines"></div>
+<body class="mode-system"> <div class="scanlines"></div>
     <canvas id="particle-canvas"></canvas>
+
+    <button class="settings-btn" onclick="toggleSettings()" onmouseenter="playHover()">
+        <i class="fa-solid fa-gear"></i>
+    </button>
+    <div class="settings-menu" id="settingsMenu">
+        <h3 style="margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">UI_MODE_SELECT</h3>
+        <button class="mode-select-btn" onclick="setMode('system')" onmouseenter="playHover()">[1] SYSTEM (Default)</button>
+        <button class="mode-select-btn" onclick="setMode('clean')" onmouseenter="playHover()">[2] CLEAN (Simple)</button>
+        <button class="mode-select-btn" onclick="setMode('terminal')" onmouseenter="playHover()">[3] TERMINAL (Retro)</button>
+        
+        <div style="margin-top: 15px; font-size: 0.7rem; color: #666;">
+            VOLUME: <input type="range" id="volControl" min="0" max="1" step="0.1" value="0.5" oninput="updateVol(this.value)">
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div>SESSION: <span id="sessionTimer">00:00</span></div>
+        <div>LOCAL_TIME: <span id="localClock">00:00:00</span></div>
+        <div style="color:var(--accent)">STATUS: ONLINE</div>
+    </div>
 
     <header>
         <div class="container">
-            <h1 class="hero-title glitch-target" data-text="LUCKY">LUCKY</h1>
-            <div class="hero-sub">Producer / Visual Artist</div>
+            <h1 class="hero-title glitch-text" data-text="LUCKY">LUCKY</h1>
+            <div class="hero-sub">MULTIMEDIA PRODUCER</div>
         </div>
     </header>
 
     <div class="container">
-        <div class="nav-deck">
-            <button class="nav-btn active" onclick="openTab('overview', this)">OVERVIEW</button>
-            <button class="nav-btn" onclick="openTab('releases', this)">RELEASES</button>
-            <button class="nav-btn" onclick="openTab('info', this)">INFO & FAQ</button>
-            <button class="nav-btn" onclick="openTab('links', this)">LINKS</button>
-        </div>
+        
+        <nav class="nav-deck">
+            <button class="nav-btn active" onclick="switchTab('overview', this)" onmouseenter="playHover()">OVERVIEW</button>
+            <button class="nav-btn" onclick="switchTab('releases', this)" onmouseenter="playHover()">RELEASES</button>
+            <button class="nav-btn" onclick="switchTab('data', this)" onmouseenter="playHover()">DATA_LOG</button>
+            <button class="nav-btn" onclick="switchTab('uplinks', this)" onmouseenter="playHover()">UPLINKS</button>
+        </nav>
 
         <div id="overview" class="tab-content active">
-            <div class="profile-section">
-                <div class="profile-img">
-                    <h2>M</h2>
+            <div class="profile-grid">
+                <div class="card-container profile-img tilt-target">
+                    <h1>M</h1>
+                    <div style="position: absolute; bottom: 10px; right: 10px; font-size: 0.7rem; border: var(--border); padding: 2px 5px;">ID: M</div>
                 </div>
-                <div class="profile-info">
+                
+                <div class="card-container tilt-target">
                     <h2>MULTIVERSAL TRANSCEND</h2>
+                    <p style="color: var(--accent); font-weight: bold;">[BIGGEST PROJECT YET]</p>
                     <p>
-                        This is going to be my first and <span class="highlight">BIGGEST</span> album yet.
-                        I'm blending everything I love: PsyStyle, Hardstyle, Cinematic Orchestral, Speedcore, and Hybrid Trap.
+                        This isn't just an album; it's a genre-bending event. I'm combining 
+                        PsyStyle, Hardstyle, 200step, Cinematic Orchestral, Speedcore, and Hybrid Trap 
+                        into one massive experience.
                     </p>
-                    <p>It's currently a W.I.P (Work In Progress), but I promise it will be worth the wait.</p>
+                    <p>It is currently a Work In Progress. Be ready.</p>
 
-                    <div class="audio-player">
-                        <div class="player-row">
-                            <button class="play-btn-circle" id="playTrigger">
+                    <div class="audio-wrapper">
+                        <div style="font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7;">INTERCEPTED FILE: CROSSFADE_DEMO</div>
+                        <div class="player-controls">
+                            <button class="play-btn" id="playBtn" onmouseenter="playHover()">
                                 <i class="fa-solid fa-play"></i>
                             </button>
-                            <div class="track-display">
-                                <span class="track-title">Sneak Peek: Crossfade Demo</span>
-                                <span class="track-status" id="trackStatus">Ready to Decrypt</span>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold; font-size: 0.9rem;">Sneak Peek</div>
+                                <div id="trackStatus" style="font-size: 0.7rem;">Ready to Decrypt...</div>
                             </div>
-                            <div class="viz-bars" id="vizBars">
+                            <div class="viz-box" id="vizBox">
                                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
                             </div>
                         </div>
-                        <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fa-solid fa-volume-high" style="color:var(--text-muted); font-size: 0.8rem;"></i>
-                            <input type="range" class="vol-slider" min="0" max="1" step="0.1" value="0.5" oninput="changeVol(this.value)">
-                        </div>
                     </div>
-                    <audio id="mainAudio" crossorigin="anonymous"></audio>
 
                 </div>
             </div>
         </div>
 
         <div id="releases" class="tab-content">
-            <h2 style="margin-bottom: 20px; font-family: var(--font-display);">DISCOGRAPHY</h2>
-            <ul class="release-list">
-                <li class="release-item">
-                    <div class="release-info">
-                        <h3>Multiversal Transcend (Album)</h3>
-                        <span>10+ Tracks / Various Genres</span>
-                    </div>
-                    <div class="status-badge">SOON.</div>
-                </li>
-                <li class="release-item">
-                    <div class="release-info">
-                        <h3>Unknown Track 01</h3>
-                        <span>Speedcore / 250 BPM</span>
-                    </div>
-                    <div class="status-badge">SOON.</div>
-                </li>
-                <li class="release-item">
-                    <div class="release-info">
-                        <h3>Cinematic Intro ID</h3>
-                        <span>Orchestral</span>
-                    </div>
-                    <div class="status-badge">SOON.</div>
-                </li>
-                <li class="release-item">
-                    <div class="release-info">
-                        <h3>Collaboration ID</h3>
-                        <span>NeuroFunk</span>
-                    </div>
-                    <div class="status-badge">SOON.</div>
-                </li>
-            </ul>
-        </div>
-
-        <div id="info" class="tab-content">
-            <h2 style="margin-bottom: 30px; font-family: var(--font-display);">ABOUT ME</h2>
-            
-            <div class="faq-block">
-                <h3>Who are you?</h3>
-                <p>I'm Lucky. I make music and digital art. My style is what I call <span class="highlight">"Full Flavor"</span>—I don't stick to just one genre. If it sounds cool, I make it.</p>
+            <h2 style="text-align: center; margin-bottom: 30px;">DISCOGRAPHY</h2>
+            <div class="release-item card-container tilt-target">
+                <div>
+                    <h3>Multiversal Transcend</h3>
+                    <div style="font-size: 0.8rem; opacity: 0.6;">Album / Multi-Genre</div>
+                </div>
+                <div class="tag">SOON</div>
             </div>
-
-            <div class="faq-block">
-                <h3>How did you start?</h3>
-                <p>Back in late 2023/early 2024, I was playing a Roblox rhythm game called <em>Funky Friday</em>. I discovered an artist named <strong>Camellia</strong> there. His complex style blew my mind and inspired me to open up a DAW and try making my own music.</p>
+            <div class="release-item card-container tilt-target">
+                <div>
+                    <h3>Unknown Speedcore ID</h3>
+                    <div style="font-size: 0.8rem; opacity: 0.6;">Single / 250+ BPM</div>
+                </div>
+                <div class="tag">SOON</div>
             </div>
-
-            <div class="faq-block">
-                <h3>What are your hobbies?</h3>
-                <p>Aside from music production (FL Studio user here!), I love:</p>
-                <ul style="margin-left: 20px; margin-top: 10px; color: var(--text-muted); line-height: 1.6;">
-                    <li>Fishing and outdoor stuff</li>
-                    <li>Riding Dirt Bikes and ATVs</li>
-                    <li>Astrophotography (taking pictures of space!)</li>
-                    <li>Video editing and making short films</li>
-                </ul>
-                <p style="margin-top: 10px;">I'm pretty open to trying almost anything creative or active.</p>
+            <div class="release-item card-container tilt-target">
+                <div>
+                    <h3>Cinematic Orchestral Intro</h3>
+                    <div style="font-size: 0.8rem; opacity: 0.6;">Intro / Atmospheric</div>
+                </div>
+                <div class="tag">SOON</div>
             </div>
         </div>
 
-        <div id="links" class="tab-content">
-            <div class="links-grid">
-                <a href="https://soundcloud.com/bh-fire-558322673" target="_blank" class="link-card">
+        <div id="data" class="tab-content">
+            <div class="card-container tilt-target">
+                <div class="faq-item">
+                    <div class="faq-q">Origin Story</div>
+                    <div class="faq-a">
+                        Back in late 2023/early 2024, I played <em>Funky Friday</em> on Roblox and discovered <strong>Camellia</strong>. His music blew my mind and inspired me to start producing my own tracks with a similar chaotic style.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Hobbies</div>
+                    <div class="faq-a">
+                        Besides producing in FL Studio, I love Fishing, riding Dirt Bikes/ATVs, Astrophotography, and making short films. I'm always open to trying new things.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is "Full Flavor"?</div>
+                    <div class="faq-a">
+                        It means I don't stick to one genre. If I want to make Orchestral music today and Speedcore tomorrow, I do it.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="uplinks" class="tab-content">
+            <div class="link-grid">
+                <a href="https://soundcloud.com/bh-fire-558322673" target="_blank" class="link-card tilt-target" onmouseenter="playHover()">
                     <i class="fa-brands fa-soundcloud"></i>
-                    <h4>SoundCloud</h4>
-                    <span>Stream my Music</span>
+                    <h3>SoundCloud</h3>
+                    <div>Stream Data</div>
                 </a>
-                <a href="https://www.youtube.com/@LuckyDTM" target="_blank" class="link-card">
+                <a href="https://www.youtube.com/@LuckyDTM" target="_blank" class="link-card tilt-target" onmouseenter="playHover()">
                     <i class="fa-brands fa-youtube"></i>
-                    <h4>YouTube</h4>
-                    <span>Visuals & Releases</span>
+                    <h3>YouTube</h3>
+                    <div>Visual Feed</div>
                 </a>
-                <a href="https://discord.com/users/758210843510308864" target="_blank" class="link-card">
+                <a href="https://discord.com/users/758210843510308864" target="_blank" class="link-card tilt-target" onmouseenter="playHover()">
                     <i class="fa-brands fa-discord"></i>
-                    <h4>Discord</h4>
-                    <span>Chat with me</span>
+                    <h3>Discord</h3>
+                    <div>Comms</div>
                 </a>
             </div>
         </div>
 
     </div>
 
+    <audio id="mainAudio" crossorigin="anonymous"></audio>
+
     <script>
-        /* --- 1. SETTINGS & THEMES --- */
-        const settingsPanel = document.getElementById('settingsPanel');
-        
+        /* =========================================
+           LOGIC CORE
+           =========================================
+        */
+
+        // 1. THEME SWITCHER
         function toggleSettings() {
-            settingsPanel.classList.toggle('open');
+            document.getElementById('settingsMenu').classList.toggle('open');
+            playClick();
         }
 
-        function setTheme(themeName) {
-            document.body.setAttribute('data-theme', themeName);
+        function setMode(mode) {
+            document.body.className = `mode-${mode}`;
+            playClick();
             
-            // Handle Glitch Effect Logic
-            const title = document.querySelector('.hero-title');
-            if(themeName === 'classic') {
-                title.classList.remove('glitch-target');
-                title.classList.remove('glitch-active');
-            } else {
-                title.classList.add('glitch-target');
-            }
-
-            // Update Active Button UI
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            // Handle Particles based on theme
+            const color = mode === 'clean' ? "rgba(0,0,0,0.1)" : 
+                          mode === 'terminal' ? "rgba(50,255,0,0.2)" : 
+                          "rgba(255,255,255,0.1)";
+            updateParticles(color);
         }
 
-        function setAccent(color) {
-            document.documentElement.style.setProperty('--accent', color);
-            // Also set a glow version
-            document.documentElement.style.setProperty('--accent-glow', color + '4d'); // 30% opacity
-        }
-
-        /* --- 2. TAB NAVIGATION --- */
-        function openTab(id, btn) {
-            // Hide all
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        // 2. TAB SWITCHING
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            // Show target
-            document.getElementById(id).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
+            playClick();
         }
 
-        /* --- 3. AUDIO PLAYER LOGIC --- */
+        // 3. UI SOUND FX (Generated via Web Audio API - No files needed)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playClick() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            // High pitch beep
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playHover() {
+            if(audioCtx.state === 'suspended') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // 4. REAL-TIME CLOCK & TIMER
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('localClock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('sessionTimer').innerText = `${mins}:${secs}`;
+        }, 1000);
+
+        // 5. AUDIO PLAYER (Same robust logic)
         const audio = document.getElementById('mainAudio');
-        const playBtn = document.getElementById('playTrigger');
+        const playBtn = document.getElementById('playBtn');
         const status = document.getElementById('trackStatus');
-        const playerContainer = document.querySelector('.audio-player');
         let isPlaying = false;
+        let vizInterval;
+
+        function updateVol(val) { audio.volume = val; }
 
         playBtn.addEventListener('click', async () => {
             if(!isPlaying) {
-                // If no source yet, load file
                 if(!audio.src) {
-                    status.innerText = "Loading File...";
+                    status.innerText = "Decrypting File...";
                     try {
                         const r = await fetch('sneakypeek.txt');
-                        if(!r.ok) throw new Error("File Missing");
+                        if(!r.ok) throw new Error();
                         let txt = await r.text();
                         audio.src = txt.trim().startsWith('data:') ? txt.trim() : `data:audio/wav;base64,${txt.trim()}`;
                     } catch(e) {
-                        status.innerText = "Error: sneakypeek.txt not found";
+                        status.innerText = "Error: File Missing";
                         return;
                     }
                 }
                 audio.play();
                 isPlaying = true;
                 playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                status.innerText = "Now Playing";
-                playerContainer.classList.add('playing');
+                status.innerText = "Now Playing: Crossfade";
+                startViz();
             } else {
                 audio.pause();
                 isPlaying = false;
                 playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
                 status.innerText = "Paused";
-                playerContainer.classList.remove('playing');
+                clearInterval(vizInterval);
             }
         });
 
-        function changeVol(val) {
-            audio.volume = val;
+        function startViz() {
+            const bars = document.querySelectorAll('.bar');
+            vizInterval = setInterval(() => {
+                bars.forEach(b => {
+                    b.style.height = (Math.random() * 100) + "%";
+                });
+            }, 100);
         }
 
-        audio.onended = () => {
-            isPlaying = false;
-            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-            status.innerText = "Track Finished";
-            playerContainer.classList.remove('playing');
-        };
+        // 6. KONAMI CODE EASTER EGG
+        const secretCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        let codePos = 0;
+        document.addEventListener('keydown', (e) => {
+            if(e.key === secretCode[codePos]) {
+                codePos++;
+                if(codePos === secretCode.length) {
+                    alert("CHEAT CODE ACTIVATED: UNLIMITED CREATIVITY UNLOCKED");
+                    document.body.style.filter = "invert(1)";
+                    codePos = 0;
+                }
+            } else {
+                codePos = 0;
+            }
+        });
 
-        /* --- 4. GLITCH TEXT (Only runs in Default/Midnight) --- */
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const titleElement = document.querySelector('.hero-title');
+        // 7. GLITCH TITLE
+        const title = document.querySelector('.glitch-text');
+        const originalText = "LUCKY";
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         
         setInterval(() => {
-            // Don't glitch if in Classic mode
-            if(document.body.getAttribute('data-theme') === 'classic') return;
-
-            const original = "LUCKY";
-            let iterations = 0;
-            titleElement.classList.add('glitch-active');
-            
+            if(document.body.classList.contains('mode-clean')) return; // No glitch in clean mode
+            let iter = 0;
             const interval = setInterval(() => {
-                titleElement.innerText = original.split("").map((l, i) => {
-                    if(i < iterations) return original[i];
-                    return letters[Math.floor(Math.random() * 36)];
+                title.innerText = originalText.split("").map((l, i) => {
+                    if(i < iter) return originalText[i];
+                    return chars[Math.floor(Math.random() * 36)];
                 }).join("");
-                
-                if(iterations >= original.length) { 
-                    clearInterval(interval); 
-                    titleElement.classList.remove('glitch-active');
-                    titleElement.innerText = original;
-                }
-                iterations += 1; // Speed
-            }, 50); // Frame rate
-        }, 5000); // Frequency
+                if(iter >= originalText.length) clearInterval(interval);
+                iter += 1/3;
+            }, 30);
+        }, 5000);
 
-        /* --- 5. PARTICLES (Background) --- */
+        // 8. PHYSICS TILT (Active only in System Mode)
+        const cards = document.querySelectorAll('.tilt-target');
+        document.addEventListener('mousemove', (e) => {
+            if(!document.body.classList.contains('mode-system')) return;
+            
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Only animate if mouse is close/over
+                if(x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
+                     const xRot = -((y - rect.height/2) / rect.height * 10);
+                     const yRot = (x - rect.width/2) / rect.width * 10;
+                     card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg)`;
+                } else {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                }
+            });
+        });
+
+        // 9. PARTICLES
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
+        let pColor = "rgba(255,255,255,0.1)";
+
+        function updateParticles(color) { pColor = color; }
 
         function initParticles() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<30; i++) {
+            for(let i=0; i<40; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
@@ -600,14 +587,9 @@
                 });
             }
         }
-
         function animateParticles() {
             ctx.clearRect(0, 0, width, height);
-            
-            // Check theme for particle color
-            const isClassic = document.body.getAttribute('data-theme') === 'classic';
-            ctx.fillStyle = isClassic ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)";
-
+            ctx.fillStyle = pColor;
             particles.forEach(p => {
                 p.y -= p.speed;
                 if(p.y < 0) p.y = height;
@@ -617,7 +599,7 @@
             });
             requestAnimationFrame(animateParticles);
         }
-        
+
         window.onload = () => { initParticles(); animateParticles(); };
         window.onresize = initParticles;
 
