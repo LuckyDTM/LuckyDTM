@@ -500,7 +500,7 @@
         const audioContainer = document.getElementById('audio-container');
 
         // Number of bars
-        const BAR_COUNT = 32;
+        const BAR_COUNT = 128;
         // Create DOM bars
         for(let i=0; i<BAR_COUNT; i++) {
             const bar = document.createElement('div');
@@ -516,7 +516,7 @@
             if(!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 64; // Low res FFT for chunkier bars
+                analyser.fftSize = 128; // Low res FFT for chunkier bars
                 
                 source = audioCtx.createMediaElementSource(audioEl);
                 source.connect(analyser);
