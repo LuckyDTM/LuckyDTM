@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
+        /* --- FAVICON LOADER --- */
         document.addEventListener("DOMContentLoaded", async () => {
             try {
                 const r = await fetch('favicon.txt');
@@ -122,7 +123,6 @@
             transition: color 0.1s;
         }
         
-        /* CSS Glitch Animation Classes (Triggered by JS) */
         .glitch-active {
             color: var(--white);
             text-shadow: 3px 0 var(--deep-blue), -3px 0 var(--cyan);
@@ -140,7 +140,7 @@
 
         /* SUBTLE 3D CARD SYSTEM */
         .tilt-box {
-            perspective: 1500px; /* Higher number = less distortion */
+            perspective: 1500px; 
             transform-style: preserve-3d;
         }
         
@@ -149,7 +149,7 @@
             border: 1px solid rgba(255,255,255,0.05);
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.2s ease-out; /* Smooth, heavy physics */
+            transition: transform 0.2s ease-out; 
             backdrop-filter: blur(5px);
         }
 
@@ -161,14 +161,12 @@
         .tech-corners::before { top: -1px; left: -1px; border-bottom: none; border-right: none; }
         .tech-corners::after { bottom: -1px; right: -1px; border-top: none; border-left: none; }
         
-        /* General hover for tech corners (used for both tilt and static cards) */
         .tilt-card:hover .tech-corners::before, .tilt-card:hover .tech-corners::after,
         .social-item:hover .tech-corners::before, .social-item:hover .tech-corners::after { 
             width: 100%; height: 100%; opacity: 1; box-shadow: 0 0 10px var(--cyan); 
         }
-
+        
         .tilt-card:hover { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
-
 
         /* SECTIONS */
         .section-label {
@@ -192,29 +190,89 @@
 
         .typewriter { font-size: 0.9rem; line-height: 1.8; color: #bbb; min-height: 150px; }
 
+        /* --- NEW AUDIO PLAYER STYLES --- */
+        .audio-terminal {
+            border: 1px solid #333;
+            background: rgba(0, 5, 10, 0.8);
+            padding: 20px;
+            margin-top: 50px;
+            position: relative;
+        }
+        .audio-terminal-header {
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .play-btn {
+            background: transparent;
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 10px 20px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .play-btn:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--cyan);
+        }
+        .play-btn:disabled {
+            border-color: #333;
+            color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .audio-status {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        /* Fake visualizer bars */
+        .visualizer {
+            display: flex;
+            gap: 2px;
+            height: 30px;
+            align-items: flex-end;
+            margin-left: auto;
+            opacity: 0.3;
+        }
+        .v-bar {
+            width: 4px;
+            background: var(--cyan);
+            height: 20%;
+            transition: height 0.1s;
+        }
+        .playing .visualizer { opacity: 1; }
+
         /* SOCIAL GRID - STATIC CARDS */
         .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        
         .social-item {
             height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-decoration: none; color: white;
-            /* Added background here to replace tilt-card style */
             background: var(--glass);
             border: 1px solid rgba(255,255,255,0.05);
-            position: relative; /* Needed for corners */
+            position: relative;
             transition: 0.3s ease;
         }
-        
-        .social-item h3 { font-size: 1.4rem; margin-bottom: 5px; z-index: 10; transition: 0.3s; }
-        .social-item span { color: #555; font-size: 0.75rem; z-index: 10; transition: 0.3s; }
-        
-        /* Simple hover effect instead of 3D */
         .social-item:hover {
             transform: translateY(-5px);
             border-color: rgba(0, 243, 255, 0.2); 
             box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
         }
-
+        .social-item h3 { font-size: 1.4rem; margin-bottom: 5px; z-index: 10; transition: 0.3s; }
+        .social-item span { color: #555; font-size: 0.75rem; z-index: 10; transition: 0.3s; }
         .social-item:hover h3 { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
         .social-item:hover span { color: #fff; }
 
@@ -233,6 +291,8 @@
             .project-grid, .social-grid, .stats-bar { grid-template-columns: 1fr; }
             .project-visual { border-right: none; border-bottom: 1px solid #222; height: 200px; min-height: auto;}
             .status-terminal { display: none; }
+            .audio-controls { flex-direction: column; align-items: flex-start; }
+            .visualizer { display: none; }
         }
     </style>
 </head>
@@ -246,7 +306,7 @@
     <div class="status-terminal">
         <div>SYSTEM_STATUS: <span class="status-dot"></span> ONLINE</div>
         <div>COORDS: <span id="coords">00.00.00</span></div>
-        <div>VER: 4.0.1</div>
+        <div>VER: 4.0.2</div>
     </div>
 
     <div id="loader">
@@ -297,7 +357,28 @@
                     </div>
                 </div>
             </div>
-        </section>
+
+            <div class="audio-terminal tech-corners">
+                <div class="audio-terminal-header">
+                    <span>AUDIO_INTERCEPT // FRAGMENT_01</span>
+                    <span style="color:#555">SOURCE: UNKNOWN</span>
+                </div>
+                
+                <div style="margin-bottom: 20px; font-size: 0.85rem; line-height: 1.5; color: #aaa;">
+                    WARNING: An unauthorized audio signal has been detected within the local sector. It appears to be a leaked crossfade from the timeline.
+                    <br><strong style="color: #fff;">Do you wish to decrypt and play this artifact?</strong>
+                </div>
+
+                <div class="audio-controls" id="audio-container">
+                    <button class="play-btn" id="play-trigger">DECRYPT & PLAY</button>
+                    <div class="audio-status" id="audio-status-text">WAITING FOR INPUT...</div>
+                    
+                    <div class="visualizer" id="visualizer">
+                        </div>
+                </div>
+                <audio id="sneak-audio" style="display:none;"></audio>
+            </div>
+            </section>
 
         <section class="container">
             <div class="section-label">UPLINKS // DIRECT_CONNECT</div>
@@ -329,22 +410,16 @@
     <script>
         /* --- 1. SUBTLE PHYSICS TILT (PROJECT CARD ONLY) --- */
         const tiltBoxes = document.querySelectorAll('.tilt-box');
-
         tiltBoxes.forEach(box => {
             const card = box.querySelector('.tilt-card');
-            
             box.addEventListener('mousemove', (e) => {
                 const rect = box.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                // Reduced sensitivity
                 const xRot = -((y - rect.height/2) / rect.height * 5); 
                 const yRot = (x - rect.width/2) / rect.width * 5;
-                
                 card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg)`;
             });
-
             box.addEventListener('mouseleave', () => {
                 card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
             });
@@ -354,34 +429,28 @@
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const title = document.querySelector('.glitch-target');
         const originalText = title.dataset.value;
-
         function runGlitch() {
             let iterations = 0;
             title.classList.add('glitch-active'); 
-            
             const interval = setInterval(() => {
                 title.innerText = originalText.split("").map((l, i) => {
                     if(i < iterations) return originalText[i];
                     return letters[Math.floor(Math.random() * 36)];
                 }).join("");
-                
                 if(iterations >= originalText.length) { 
                     clearInterval(interval);
                     title.classList.remove('glitch-active'); 
                     title.innerText = originalText;
                 }
-                
                 iterations += 1;
             }, 30);
         }
-
         setInterval(runGlitch, 10000);
 
         /* --- 3. TYPEWRITER --- */
         const loreText = `LOG ENTRY: The "Concept of a Space".\n\nChaos has consumed the timeline. The entity "M" was engineered to prevent total collapse, but the void remains silent.\n\nAlone and desperate, "M" must piece reality back together. To save the Multiverse, they must surpass the Beyond.`;
         const loreContainer = document.getElementById('lore-output');
         let typeIdx = 0;
-
         function typeLore() {
             if (typeIdx < loreText.length) {
                 let char = loreText.charAt(typeIdx);
@@ -392,11 +461,10 @@
             }
         }
 
-        /* --- 4. PARTICLE CANVAS (Void Dust) --- */
+        /* --- 4. PARTICLE CANVAS --- */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
-
         function initParticles() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
@@ -411,14 +479,11 @@
                 });
             }
         }
-
         function animateParticles() {
             ctx.clearRect(0, 0, width, height);
-            
             particles.forEach(p => {
                 p.y += p.speedY;
                 if(p.y < 0) p.y = height; 
-                
                 ctx.fillStyle = `rgba(0, 243, 255, ${p.opacity})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -427,14 +492,117 @@
             requestAnimationFrame(animateParticles);
         }
 
-        /* --- 5. COORDS TRACKER --- */
+        /* --- 5. AUDIO DECRYPTER LOGIC --- */
+        const playBtn = document.getElementById('play-trigger');
+        const statusText = document.getElementById('audio-status-text');
+        const audioEl = document.getElementById('sneak-audio');
+        const visualizer = document.getElementById('visualizer');
+        const audioContainer = document.getElementById('audio-container');
+
+        // Create visualizer bars
+        for(let i=0; i<20; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'v-bar';
+            visualizer.appendChild(bar);
+        }
+        
+        let isPlaying = false;
+        let vizInterval;
+
+        playBtn.addEventListener('click', async () => {
+            if(isPlaying) {
+                // Pause Logic
+                audioEl.pause();
+                isPlaying = false;
+                playBtn.innerText = "RESUME DECRYPTION";
+                statusText.innerText = "SIGNAL PAUSED";
+                statusText.style.color = "#666";
+                audioContainer.classList.remove('playing');
+                clearInterval(vizInterval);
+                return;
+            }
+
+            // Check if audio is already loaded
+            if(audioEl.src) {
+                audioEl.play();
+                isPlaying = true;
+                playBtn.innerText = "HALT PLAYBACK";
+                statusText.innerText = "PLAYING ARTIFACT...";
+                statusText.style.color = "var(--cyan)";
+                audioContainer.classList.add('playing');
+                startVisualizer();
+                return;
+            }
+
+            // Load from text file first time
+            playBtn.innerText = "DECRYPTING...";
+            playBtn.disabled = true;
+            statusText.innerText = "READING 'SNEAKYPEEK.TXT'...";
+
+            try {
+                const response = await fetch('sneakypeek.txt');
+                if(!response.ok) throw new Error("File not found");
+                
+                const base64Audio = await response.text();
+                
+                // Construct audio source
+                const audioSource = base64Audio.trim().startsWith('data:audio') 
+                    ? base64Audio.trim() 
+                    : `data:audio/wav;base64,${base64Audio.trim()}`;
+
+                audioEl.src = audioSource;
+                audioEl.volume = 0.5;
+                
+                await audioEl.play();
+                
+                isPlaying = true;
+                playBtn.disabled = false;
+                playBtn.innerText = "HALT PLAYBACK";
+                statusText.innerText = "DECRYPTION SUCCESSFUL. PLAYING.";
+                statusText.style.color = "var(--cyan)";
+                audioContainer.classList.add('playing');
+                startVisualizer();
+
+            } catch (err) {
+                console.error(err);
+                playBtn.disabled = false;
+                playBtn.innerText = "RETRY";
+                statusText.innerText = "ERROR: FILE CORRUPTED OR MISSING.";
+                statusText.style.color = "red";
+            }
+        });
+
+        // Simple Fake Visualizer Animation
+        function startVisualizer() {
+            const bars = document.querySelectorAll('.v-bar');
+            clearInterval(vizInterval);
+            vizInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    // Random height between 20% and 100%
+                    const h = Math.floor(Math.random() * 80) + 20;
+                    bar.style.height = `${h}%`;
+                });
+            }, 100);
+        }
+
+        audioEl.onended = () => {
+            isPlaying = false;
+            playBtn.innerText = "REPLAY FRAGMENT";
+            statusText.innerText = "END OF TRANSMISSION.";
+            statusText.style.color = "#666";
+            audioContainer.classList.remove('playing');
+            clearInterval(vizInterval);
+            // Reset bars
+            document.querySelectorAll('.v-bar').forEach(b => b.style.height = '20%');
+        };
+
+        /* --- 6. INIT SEQUENCE --- */
         document.addEventListener('mousemove', (e) => {
             const x = Math.round(e.clientX);
             const y = Math.round(e.clientY);
             document.getElementById('coords').innerText = `${x}.${y}`;
         });
 
-        /* --- 6. INIT SEQUENCE --- */
         const loadBar = document.getElementById('load-bar-fill');
         const loadText = document.getElementById('load-text');
         const loader = document.getElementById('loader');
@@ -448,19 +616,15 @@
             setTimeout(() => { loadBar.style.width = "80%"; loadText.innerText = "LOADING ASSETS..."; }, 800);
             setTimeout(() => { 
                 loadBar.style.width = "100%"; loadText.innerText = "READY.";
-                
                 setTimeout(() => {
                     loader.style.opacity = '0';
                     setTimeout(() => { loader.style.display = 'none'; }, 600);
-                    
                     content.style.display = 'block';
                     void content.offsetWidth; 
                     content.style.opacity = '1';
                     document.body.style.overflowY = 'auto';
-
                     setTimeout(typeLore, 1000); 
                     runGlitch(); 
-                    
                 }, 600);
             }, 1400);
         };
