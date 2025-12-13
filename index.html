@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUCKY /// SYSTEM_V7.2</title>
+    <title>LUCKY /// SYSTEM_V7.3_LORE</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,6 @@
             --font-head: 'Syncopate', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --scanline-op: 0.1;
-            /* CHANGED: Default glow is now NONE for cleaner text */
             --text-glow: none; 
         }
 
@@ -254,6 +253,46 @@
         .faq-item.open .faq-answer { display: block; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* LORE / STORY SECTION (NEW) */
+        .lore-container {
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.4);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .lore-header {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lore-credits {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        .lore-text {
+            line-height: 1.8;
+            color: #ddd;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .lore-phase {
+            color: var(--accent);
+            font-weight: bold;
+            display: block;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         /* SOCIALS */
         .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .social-card {
@@ -305,7 +344,6 @@
 
         <div class="setting-section">
             <div class="setting-title">VISUAL_PHYSICS</div>
-            
             <div class="control-row">
                 <span>Particle Density</span>
                 <input type="range" id="pCountSlider" min="0" max="100" value="40" oninput="updateParticleCount(this.value)">
@@ -318,17 +356,14 @@
 
         <div class="setting-section">
             <div class="setting-title">DISPLAY_FX</div>
-            
             <div class="control-row">
                 <span>Scanline Opacity</span>
                 <input type="range" id="scanlineSlider" min="0" max="50" value="10" oninput="updateScanlines(this.value)">
             </div>
-            
             <div class="control-row">
                 <span>Holo-Grid</span>
                 <input type="checkbox" id="gridToggle" onchange="toggleGrid(this)">
             </div>
-
             <div class="control-row">
                 <span>Text Bloom</span>
                 <input type="checkbox" id="bloomToggle" onchange="toggleBloom(this)">
@@ -342,7 +377,7 @@
         <div style="color:var(--accent)">STATUS: ONLINE</div>
         <div>SESSION: <span id="sessionTimer">00:00</span></div>
         <div>LOCAL: <span id="localClock">00:00</span></div>
-        <div>V7.2.0</div>
+        <div>V7.3.0</div>
     </div>
 
     <div id="loader">
@@ -359,16 +394,17 @@
             </div>
             
             <div style="margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; border-top: 1px solid #222; padding-top: 20px; font-size: 0.8rem; color: #666;">
-                <div>DAW: FL STUDIO</div>
-                <div>BPM: 175 - 300+</div>
+                <div>D.A.w: FL STUDIO</div>
+                <div>BPM: 90 - 500+</div>
                 <div>STATUS: ONLINE</div>
-                <div style="color:var(--accent)">MODE: FULL FLAVOR</div>
+                <div style="color:var(--accent)">M-GENRE: FULL FLAVOR</div>
             </div>
         </header>
 
         <div class="container">
             <div class="nav-deck">
                 <button class="nav-btn active" onclick="openTab('overview', this)">OVERVIEW</button>
+                <button class="nav-btn" onclick="openTab('lore', this)">M_TRANSCEND</button>
                 <button class="nav-btn" onclick="openTab('data', this)">ABOUT ME</button>
                 <button class="nav-btn" onclick="openTab('uplinks', this)">LINKS</button>
             </div>
@@ -413,6 +449,41 @@
 
             </div>
 
+            <div id="lore" class="tab-content">
+                <div class="lore-container tilt-box">
+                    <div class="lore-header">
+                        <span>PROJECT: MULTIVERSAL TRANSCEND</span>
+                        <div style="text-align: right;">
+                            <div class="lore-credits">STORY BY: DEVIL MAY / DESTRUCTION FATE</div>
+                            <div class="lore-credits">ART COVER (W.I.P): DEVIL MAY / DESTRUCTION FATE</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px; font-size: 0.85rem; color: #666; font-style: italic;">
+                        LOG ENTRY: "Concept of a Space". Decryption complete.
+                    </div>
+
+                    <span class="lore-phase">PHASE 1: THE COLLAPSE</span>
+                    <p class="lore-text">
+                        Chaos has consumed the timeline. The boundaries between realities have shattered, bleeding into one another. What was once a structured universe is now a fractured void.
+                    </p>
+
+                    <span class="lore-phase">PHASE 2: THE ENTITY "M"</span>
+                    <p class="lore-text">
+                        Engineered as a last resort to prevent total collapse, the Entity "M" awakens in the silence. But the void offers no answers. "M" is alone, desperate, and tasked with the impossible: piecing reality back together.
+                    </p>
+
+                    <span class="lore-phase">PHASE 3: THE RECONSTRUCTION</span>
+                    <p class="lore-text">
+                        To save the Multiverse, "M" must surpass the Beyond. Every genre in this album represents a fragment of reality being restored. From the aggression of Speedcore to the vastness of Orchestral soundscapes, "M" is weaving the fabric of existence back together, one beat at a time.
+                    </p>
+
+                    <div style="margin-top: 30px; border-top: 1px dashed var(--accent); padding-top: 10px; font-size: 0.8rem; color: var(--accent);">
+                        STATUS: NARRATIVE SYNCED.
+                    </div>
+                </div>
+            </div>
+
             <div id="data" class="tab-content">
                 <div style="margin-bottom: 30px; color: #555; font-size: 0.8rem;">
                     // USER BIO-DATA
@@ -437,14 +508,6 @@
                             <li>Video Editing & Short Films</li>
                         </ul>
                         <p style="margin-top: 10px;"><i>"I'm open to trying almost anything!"</i></p>
-                    </div>
-                </div>
-
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">Tell me about the Album</div>
-                    <div class="faq-answer">
-                        <p><strong>Multiversal Transcend</strong> is my first major album. It serves as a bridge between genres.</p>
-                        <p>Expect a fusion of raw speed (Speedcore) and cinematic atmosphere. The goal is not just music, but a narrative experience.</p>
                     </div>
                 </div>
 
@@ -490,14 +553,13 @@
                 pCount: document.getElementById('pCountSlider').value,
                 pSpeed: document.getElementById('pSpeedSlider').value,
                 grid: document.getElementById('gridToggle').checked,
-                // Bloom is no longer saved to persistent storage to ensure OFF on reload
+                // Bloom NOT saved, ensures OFF on reload
             };
-            localStorage.setItem('luckySystemSettingsV72', JSON.stringify(settings));
+            localStorage.setItem('luckySystemSettingsV73', JSON.stringify(settings));
         }
 
         function setTheme(color) {
             document.documentElement.style.setProperty('--accent', color);
-            // Re-apply bloom check if user has it open
             toggleBloom(document.getElementById('bloomToggle'));
             saveSettings();
         }
@@ -530,37 +592,31 @@
             } else {
                 document.documentElement.style.setProperty('--text-glow', 'none');
             }
-            // We do NOT save bloom setting so it resets on reload
+            // Not saving bloom state
         }
 
         function resetConfig() {
-            localStorage.removeItem('luckySystemSettingsV72');
+            localStorage.removeItem('luckySystemSettingsV73');
             location.reload(); 
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('luckySystemSettingsV72');
+            const saved = localStorage.getItem('luckySystemSettingsV73');
             if (saved) {
                 const s = JSON.parse(saved);
-                
-                // Set Theme
                 document.documentElement.style.setProperty('--accent', s.theme);
-                
-                // Set Inputs
                 document.getElementById('scanlineSlider').value = s.scanlines;
                 document.getElementById('pCountSlider').value = s.pCount;
                 document.getElementById('pSpeedSlider').value = s.pSpeed;
                 document.getElementById('gridToggle').checked = s.grid;
                 
-                // Ensure Bloom is OFF by default on load
+                // FORCE BLOOM OFF
                 document.getElementById('bloomToggle').checked = false;
                 document.documentElement.style.setProperty('--text-glow', 'none');
                 
-                // Apply logic
                 updateScanlines(s.scanlines);
                 initParticles(parseInt(s.pCount));
                 particleSpeedMult = s.pSpeed / 10;
-                
                 const grid = document.getElementById('holoGrid');
                 if(s.grid) grid.classList.add('active');
             }
@@ -733,14 +789,10 @@
 
         /* --- INIT --- */
         window.onload = () => {
-            loadSettings(); // Load saved settings (Text Bloom forced off)
-            
-            // If particles weren't loaded by settings, init default
+            loadSettings(); 
             if(particles.length === 0) initParticles(40);
             animateParticles();
-            
             window.addEventListener('resize', () => initParticles(particles.length));
-            
             const loadBar = document.getElementById('load-bar-fill');
             const loader = document.getElementById('loader');
             const content = document.getElementById('content');
