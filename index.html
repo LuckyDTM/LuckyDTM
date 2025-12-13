@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUCKY /// SYSTEM_V3</title>
+    <title>LUCKY /// SYSTEM_V4</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,12 +26,12 @@
     <style>
         /* --- 0. CORE VARIABLES --- */
         :root {
-            --void: #030305;
+            --void: #050505;
             --cyan: #00f3ff;
             --deep-blue: #0040ff;
             --white: #eaeaea;
-            --glass: rgba(10, 15, 20, 0.6);
-            --border: rgba(0, 243, 255, 0.2);
+            --glass: rgba(10, 15, 20, 0.7);
+            --border: rgba(0, 243, 255, 0.15);
             --font-head: 'Syncopate', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
@@ -47,48 +47,40 @@
         }
 
         /* CUSTOM SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: var(--deep-blue); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-        /* --- 1. ATMOSPHERE --- */
+        /* --- 1. VISUAL FX LAYERS --- */
         .noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9000; opacity: 0.04;
+            pointer-events: none; z-index: 9000; opacity: 0.03;
             background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
 
         .scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
-            background-size: 100% 3px; z-index: 8999; pointer-events: none;
+            background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px; z-index: 8999; pointer-events: none;
         }
 
-        /* MATRIX RAIN BACKGROUND (CSS ONLY) */
-        .data-stream {
+        /* THE SCANNER LINE (New Feature) */
+        .scanner-line {
+            position: fixed; left: 0; width: 100%; height: 2px;
+            background: var(--cyan);
+            opacity: 0.3;
+            box-shadow: 0 0 10px var(--cyan);
+            z-index: 8000;
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+
+        /* PARTICLE CANVAS */
+        #particle-canvas {
             position: fixed; top:0; left:0; width: 100%; height: 100%;
-            background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, .05) 25%, rgba(0, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, .05) 75%, rgba(0, 255, 255, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, .05) 25%, rgba(0, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, .05) 75%, rgba(0, 255, 255, .05) 76%, transparent 77%, transparent);
-            background-size: 50px 50px;
-            z-index: -2;
-            animation: scrollData 20s linear infinite;
+            z-index: -1;
         }
-        @keyframes scrollData { from { transform: translateY(0); } to { transform: translateY(50px); } }
-
-        /* GRID FLOOR */
-        .scene {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            perspective: 1000px; z-index: -1; overflow: hidden;
-            background: radial-gradient(circle at center, rgba(0, 64, 255, 0.1) 0%, #000 90%);
-        }
-        .floor {
-            position: absolute; bottom: -50%; left: -50%; width: 200%; height: 100%;
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 80px 80px; transform: rotateX(75deg);
-            animation: moveGrid 1s linear infinite;
-            mask-image: linear-gradient(to top, black 0%, transparent 80%);
-        }
-        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 0 80px; } }
 
         /* --- 2. LOADER --- */
         #loader {
@@ -96,7 +88,7 @@
             background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center;
             flex-direction: column;
         }
-        .load-bar { width: 200px; height: 2px; background: #333; position: relative; overflow: hidden; margin-top: 15px; }
+        .load-bar { width: 150px; height: 1px; background: #333; position: relative; overflow: hidden; margin-top: 15px; }
         .load-fill {
             position: absolute; top: 0; left: 0; height: 100%; width: 0%;
             background: var(--cyan); box-shadow: 0 0 20px var(--cyan);
@@ -108,108 +100,122 @@
         
         h1, h2, h3 { font-family: var(--font-head); text-transform: uppercase; }
 
+        /* SIDEBAR TERMINAL (New Feature) */
+        .status-terminal {
+            position: fixed; top: 50%; left: 30px; transform: translateY(-50%);
+            writing-mode: vertical-rl; text-orientation: mixed;
+            font-size: 0.7rem; color: #444; letter-spacing: 2px;
+            z-index: 100; pointer-events: none;
+            display: flex; gap: 20px;
+        }
+        .status-dot { width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
+
         /* HERO */
         .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; }
         
+        /* THE GLITCHING TITLE */
         .hero-title {
-            font-size: 10vw; line-height: 0.8; font-weight: 700; color: transparent;
+            font-size: 11vw; line-height: 0.8; font-weight: 700; color: transparent;
             -webkit-text-stroke: 2px var(--white); position: relative; z-index: 2;
             letter-spacing: -5px; margin-left: -5px;
+            transition: color 0.1s;
         }
         
+        /* CSS Glitch Animation Classes (Triggered by JS) */
+        .glitch-active {
+            color: var(--white);
+            text-shadow: 3px 0 var(--deep-blue), -3px 0 var(--cyan);
+            -webkit-text-stroke: 0;
+        }
+
         .hero-sub {
             font-family: var(--font-head);
-            font-size: 2vw; 
-            margin-top: 20px;
+            font-size: 1.5vw; 
+            margin-top: 30px;
             color: var(--cyan);
-            text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
-            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            letter-spacing: 4px;
         }
 
-        .hero-desc {
-            margin-top: 30px; font-size: 1rem; color: #888; max-width: 600px;
-            border-left: 2px solid var(--deep-blue); padding-left: 20px;
-        }
-
-        /* UNIVERSAL TILT CARD SYSTEM */
+        /* SUBTLE 3D CARD SYSTEM */
         .tilt-box {
-            perspective: 1000px;
+            perspective: 1500px; /* Higher number = less distortion */
             transform-style: preserve-3d;
         }
         
         .tilt-card {
             background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.05);
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out; /* Smooth physics */
-            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease-out; /* Smooth, heavy physics */
+            backdrop-filter: blur(5px);
         }
 
         /* Tech Corners */
         .tech-corners::before, .tech-corners::after {
-            content: ''; position: absolute; width: 15px; height: 15px; transition: 0.3s;
-            border: 2px solid var(--cyan);
+            content: ''; position: absolute; width: 10px; height: 10px; transition: 0.4s;
+            border: 2px solid var(--cyan); opacity: 0.5;
         }
         .tech-corners::before { top: -1px; left: -1px; border-bottom: none; border-right: none; }
         .tech-corners::after { bottom: -1px; right: -1px; border-top: none; border-left: none; }
         
-        .tilt-card:hover { border-color: rgba(0, 243, 255, 0.3); box-shadow: 0 0 30px rgba(0, 64, 255, 0.1); }
-        .tilt-card:hover .tech-corners::before, .tilt-card:hover .tech-corners::after { width: 100%; height: 100%; opacity: 0.5; }
+        .tilt-card:hover { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .tilt-card:hover .tech-corners::before, .tilt-card:hover .tech-corners::after { width: 100%; height: 100%; opacity: 1; box-shadow: 0 0 10px var(--cyan); }
 
         /* SECTIONS */
         .section-label {
-            font-size: 1.5rem; color: #fff; margin: 150px 0 40px 0;
-            display: flex; align-items: center; gap: 15px;
+            font-size: 1rem; color: #fff; margin: 150px 0 40px 0;
+            display: flex; align-items: center; gap: 15px; opacity: 0.7;
         }
         .section-label::after { content:''; height: 1px; flex-grow: 1; background: var(--border); }
 
-        /* PROJECT CARD SPECIFICS */
+        /* PROJECT CARD */
         .project-grid {
             display: grid; grid-template-columns: 1fr 1.5fr; gap: 0; 
-            border: 1px solid #222;
+            border: 1px solid #1a1a1a;
         }
         
         .project-visual {
-            background: #000; display: flex; align-items: center; justify-content: center;
-            border-right: 1px solid #222; min-height: 300px; position: relative; overflow: hidden;
+            background: #020202; display: flex; align-items: center; justify-content: center;
+            border-right: 1px solid #1a1a1a; min-height: 350px; position: relative; overflow: hidden;
         }
         
         .project-content { padding: 50px; }
 
-        .typewriter {
-            font-size: 0.95rem; line-height: 1.7; color: #bbb; min-height: 150px;
-        }
+        .typewriter { font-size: 0.9rem; line-height: 1.8; color: #bbb; min-height: 150px; }
 
-        /* SOCIAL GRID SPECIFICS */
-        .social-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
-        }
+        /* SOCIAL GRID */
+        .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         
         .social-item {
-            height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-decoration: none; color: white;
-            transform: translateZ(20px); /* Pop out in 3D */
+            background: rgba(255,255,255,0.01);
         }
         
-        .social-item h3 { font-size: 1.8rem; margin-bottom: 5px; z-index: 10; }
-        .social-item span { color: var(--cyan); font-size: 0.8rem; z-index: 10; }
+        .social-item h3 { font-size: 1.4rem; margin-bottom: 5px; z-index: 10; transition: 0.3s; }
+        .social-item span { color: #555; font-size: 0.75rem; z-index: 10; transition: 0.3s; }
+        
+        .social-item:hover h3 { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+        .social-item:hover span { color: #fff; }
 
-        /* STATS BAR */
+        /* STATS */
         .stats-bar {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
-            margin-top: 50px; border-top: 1px solid #222; padding-top: 20px;
+            margin-top: 60px; border-top: 1px solid #222; padding-top: 20px;
         }
-        .stat h4 { color: var(--deep-blue); font-size: 0.8rem; margin-bottom: 5px; }
-        .stat p { font-size: 1.2rem; font-weight: 700; }
+        .stat h4 { color: #555; font-size: 0.7rem; margin-bottom: 5px; }
+        .stat p { font-size: 1.1rem; font-weight: 700; color: #fff; }
 
-        /* FOOTER */
-        footer { margin-top: 100px; text-align: center; color: #555; font-size: 0.8rem; }
+        footer { margin-top: 100px; text-align: center; color: #444; font-size: 0.7rem; letter-spacing: 2px; }
 
         @media(max-width: 900px) {
             .hero-title { font-size: 15vw; }
             .project-grid, .social-grid, .stats-bar { grid-template-columns: 1fr; }
             .project-visual { border-right: none; border-bottom: 1px solid #222; height: 200px; min-height: auto;}
+            .status-terminal { display: none; }
         }
     </style>
 </head>
@@ -217,11 +223,17 @@
 
     <div class="noise"></div>
     <div class="scanlines"></div>
-    <div class="data-stream"></div>
-    <div class="scene"><div class="floor"></div></div>
+    <div class="scanner-line"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="status-terminal">
+        <div>SYSTEM_STATUS: <span class="status-dot"></span> ONLINE</div>
+        <div>COORDS: <span id="coords">00.00.00</span></div>
+        <div>VER: 4.0.1</div>
+    </div>
 
     <div id="loader">
-        <h2 style="letter-spacing: 5px; color: #fff;">SYSTEM_BOOT</h2>
+        <h2 style="letter-spacing: 5px; color: #fff; font-size: 1rem;">SYSTEM_BOOT</h2>
         <div class="load-bar"><div class="load-fill" id="load-bar-fill"></div></div>
         <div style="margin-top: 10px; font-size: 0.7rem; color: #666;" id="load-text">INITIALIZING...</div>
     </div>
@@ -230,43 +242,39 @@
         
         <header class="hero container">
             <div>
-                <h1 class="hero-title decode-text" data-value="LUCKY">LUCKY</h1>
-                <h2 class="hero-sub glitch-text">MULTIVERSAL TRANSCEND // IN THE WORKS</h2>
+                <h1 class="hero-title glitch-target" data-value="LUCKY">LUCKY</h1>
+                <h2 class="hero-sub">MULTIVERSAL TRANSCEND // IN THE WORKS</h2>
                 
-                <div class="hero-desc">
-                    <p>ELECTRONIC MUSIC PRODUCER. SPEEDCORE // ARTCORE // ORCHESTRAL FUSION.</p>
-                </div>
-
                 <div class="stats-bar">
-                    <div class="stat"><h4>DAW</h4><p>FL STUDIO</p></div>
-                    <div class="stat"><h4>BPM</h4><p>175+</p></div>
-                    <div class="stat"><h4>STATUS</h4><p style="color:var(--cyan)">ONLINE</p></div>
+                    <div class="stat"><h4>PRIMARY DAW</h4><p>FL STUDIO</p></div>
+                    <div class="stat"><h4>BPM RANGE</h4><p>175 - 300+</p></div>
+                    <div class="stat"><h4>AUDIO CLASS</h4><p style="color:var(--cyan)">SPEEDCORE</p></div>
                     <div class="stat"><h4>PROJECT</h4><p>W.I.P</p></div>
                 </div>
             </div>
         </header>
 
         <section class="container">
-            <div class="section-label">PROJECT_DATA</div>
+            <div class="section-label">PROJECT_DATA // [ENCRYPTED]</div>
             
             <div class="tilt-box">
                 <div class="tilt-card tech-corners project-grid">
                     <div class="project-visual">
-                        <h1 style="font-size: 8rem; color: #111; text-shadow: -1px -1px 0 var(--cyan);">M</h1>
-                        <div style="position: absolute; bottom: 10px; right: 10px; font-size: 0.7rem; color: var(--cyan);">ENTITY_ID: M</div>
+                        <h1 style="font-size: 8rem; color: #080808; text-shadow: 0px 0px 0 var(--cyan);">M</h1>
+                        <div style="position: absolute; bottom: 15px; right: 15px; font-size: 0.6rem; color: var(--cyan); border: 1px solid var(--cyan); padding: 3px 6px;">ENTITY_ID: M</div>
                     </div>
                     <div class="project-content">
-                        <h3 style="font-size: 1.8rem; margin-bottom: 20px;">MULTIVERSAL TRANSCEND</h3>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">MULTIVERSAL TRANSCEND</h3>
                         
                         <div class="typewriter" id="lore-output"></div>
 
-                        <div style="margin-top: 30px;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                                <span>COMPLETION</span>
-                                <span>45%</span>
+                        <div style="margin-top: 40px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 8px; color: #666;">
+                                <span>COMPILATION STATUS</span>
+                                <span style="color:var(--cyan)">45%</span>
                             </div>
-                            <div style="width: 100%; height: 4px; background: #222;">
-                                <div style="width: 45%; height: 100%; background: var(--deep-blue); box-shadow: 0 0 15px var(--deep-blue);"></div>
+                            <div style="width: 100%; height: 2px; background: #222;">
+                                <div style="width: 45%; height: 100%; background: var(--cyan); box-shadow: 0 0 15px var(--cyan);"></div>
                             </div>
                         </div>
                     </div>
@@ -275,7 +283,7 @@
         </section>
 
         <section class="container">
-            <div class="section-label">UPLINKS</div>
+            <div class="section-label">UPLINKS // DIRECT_CONNECT</div>
             
             <div class="social-grid">
                 <div class="tilt-box">
@@ -302,12 +310,12 @@
         </section>
 
         <footer>
-            &copy; 2025 LUCKY. MULTIVERSE LOADED.
+            &copy; 2025 LUCKY. END OF LINE.
         </footer>
     </div>
 
     <script>
-        /* --- 1. UNIVERSAL TILT LOGIC --- */
+        /* --- 1. SUBTLE PHYSICS TILT (TONED DOWN) --- */
         const tiltBoxes = document.querySelectorAll('.tilt-box');
 
         tiltBoxes.forEach(box => {
@@ -318,9 +326,9 @@
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 
-                // Calculate rotation (Sensitivity: 15deg)
-                const xRot = -((y - rect.height/2) / rect.height * 15);
-                const yRot = (x - rect.width/2) / rect.width * 15;
+                // Reduced sensitivity: Changed division from 15 to 30 for subtle weight
+                const xRot = -((y - rect.height/2) / rect.height * 5); 
+                const yRot = (x - rect.width/2) / rect.width * 5;
                 
                 card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg)`;
             });
@@ -330,22 +338,35 @@
             });
         });
 
-        /* --- 2. DECODE TEXT EFFECT --- */
+        /* --- 2. INFINITE GLITCH TITLE --- */
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        function decodeEffect(target) {
+        const title = document.querySelector('.glitch-target');
+        const originalText = title.dataset.value;
+
+        function runGlitch() {
             let iterations = 0;
-            const original = target.dataset.value; 
+            title.classList.add('glitch-active'); // Turn on CSS text shadow fx
+            
             const interval = setInterval(() => {
-                target.innerText = original.split("").map((l, i) => {
-                    if(i < iterations) return original[i];
+                title.innerText = originalText.split("").map((l, i) => {
+                    if(i < iterations) return originalText[i];
                     return letters[Math.floor(Math.random() * 36)];
                 }).join("");
-                if(iterations >= original.length) clearInterval(interval);
+                
+                if(iterations >= originalText.length) { 
+                    clearInterval(interval);
+                    title.classList.remove('glitch-active'); // Turn off fx
+                    title.innerText = originalText; // Ensure clean reset
+                }
+                
                 iterations += 1/3;
             }, 30);
         }
 
-        /* --- 3. TYPEWRITER EFFECT --- */
+        // Run glitch every 4 seconds
+        setInterval(runGlitch, 4000);
+
+        /* --- 3. TYPEWRITER --- */
         const loreText = `LOG ENTRY: The "Concept of a Space".\n\nChaos has consumed the timeline. The entity "M" was engineered to prevent total collapse, but the void remains silent.\n\nAlone and desperate, "M" must piece reality back together. To save the Multiverse, they must surpass the Beyond.`;
         const loreContainer = document.getElementById('lore-output');
         let typeIdx = 0;
@@ -360,20 +381,63 @@
             }
         }
 
-        /* --- 4. INIT SEQUENCE --- */
+        /* --- 4. PARTICLE CANVAS (Void Dust) --- */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function initParticles() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i<50; i++) { // Fewer particles for cleaner look
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    speedY: Math.random() * -0.5, // Float up
+                    opacity: Math.random() * 0.5
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                p.y += p.speedY;
+                if(p.y < 0) p.y = height; // Reset to bottom
+                
+                ctx.fillStyle = `rgba(0, 243, 255, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        /* --- 5. COORDS TRACKER --- */
+        document.addEventListener('mousemove', (e) => {
+            const x = Math.round(e.clientX);
+            const y = Math.round(e.clientY);
+            document.getElementById('coords').innerText = `${x}.${y}`;
+        });
+
+        /* --- 6. INIT SEQUENCE --- */
         const loadBar = document.getElementById('load-bar-fill');
         const loadText = document.getElementById('load-text');
         const loader = document.getElementById('loader');
         const content = document.getElementById('content');
 
         window.onload = () => {
-            // Loader Animation
+            initParticles(); animateParticles();
+            window.addEventListener('resize', initParticles);
+
             setTimeout(() => { loadBar.style.width = "50%"; }, 200);
             setTimeout(() => { loadBar.style.width = "80%"; loadText.innerText = "LOADING ASSETS..."; }, 800);
             setTimeout(() => { 
                 loadBar.style.width = "100%"; loadText.innerText = "READY.";
                 
-                // Reveal Content
                 setTimeout(() => {
                     loader.style.opacity = '0';
                     setTimeout(() => { loader.style.display = 'none'; }, 600);
@@ -383,9 +447,8 @@
                     content.style.opacity = '1';
                     document.body.style.overflowY = 'auto';
 
-                    // Trigger Effects
-                    decodeEffect(document.querySelector('.decode-text'));
-                    setTimeout(typeLore, 1000); // Start typing lore
+                    setTimeout(typeLore, 1000); 
+                    runGlitch(); // Initial glitch
                     
                 }, 600);
             }, 1400);
